@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
-import brightspot.util.RecordableUtils;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.db.Site;
 import com.psddev.cms.db.ToolUi;
@@ -110,7 +109,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
         // check if changed
         if (databaseState != null
-            && RecordableUtils.computeDelta(databaseSettings, this).get(CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME)
+            && Utils.computeDelta(databaseSettings, this).get(CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME)
             != null) {
             String info = "CONTENT TYPE MAPS FIELD HAS CHANGED. TRIGGERING REINDEX";
 

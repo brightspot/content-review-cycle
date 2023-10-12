@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import brightspot.contentpublishutils.ContentPublishUtils;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Draft;
 import com.psddev.cms.db.Site;
@@ -20,7 +19,6 @@ import com.psddev.dari.db.Modification;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.State;
-import com.psddev.dari.util.UnresolvedState;
 
 @ToolUi.FieldInternalNamePrefix(ReviewCycleContentModification.FIELD_PREFIX)
 @DynamicTypeClass(ReviewCycleGlobalDynamicType.class)
@@ -106,7 +104,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     }
 
     private Date calculateNextReviewDate() {
-        HasReviewCycle hasReviewCycle = UnresolvedState.resolve(getOriginalObject());
+        HasReviewCycle hasReviewCycle = Utils.resolve(getOriginalObject());
         ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
             .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
             .map(ReviewCycleContentModification::getReviewCycleMap)
@@ -143,7 +141,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         // If firstPublish or Revision publish, set last date.
 
         // First Publish
-        if (ContentPublishUtils.isFirstPublish(originalObject)) {
+        if (Utils.isFirstPublish(originalObject)) {
             originalObject.as(ReviewCycleContentModification.class)
                 .setReviewDate(now);
         }
