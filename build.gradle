@@ -1,0 +1,13 @@
+plugins {
+    id 'com.brightspot.java-library'
+}
+
+description = 'Component Library: CMS Expot'
+
+dependencies {
+    api project (':util-state-walker')
+
+    api 'com.psddev:cms-db'
+    api 'com.psddev:dari-db'
+    api 'com.psddev:dari-util'
+}

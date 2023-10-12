@@ -1,0 +1,48 @@
+package brightspot.reviewcycle.notification;
+
+import java.util.Date;
+import java.util.UUID;
+
+import com.psddev.cms.db.Content;
+import com.psddev.dari.db.Query;
+import com.psddev.dari.notification.Notification;
+import com.psddev.dari.notification.Subscriber;
+import com.psddev.watch.WatcherObjectModification;
+
+public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubscription, ReviewCycleNotificationBundle> {
+
+    private ReviewCycleNotificationBundle bundle;
+
+    public ReviewCycleNotificationBundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(ReviewCycleNotificationBundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public ReviewCycleDueNotification() {
+        super();
+    }
+
+    public ReviewCycleDueNotification(ReviewCycleNotificationBundle bundle) {
+        super();
+        this.bundle = bundle;
+        setPayload(bundle);
+    }
+
+    public ReviewCycleDueNotification(String contentLabel, UUID contentId, Date dueDate, String ownerName) {
+        super();
+        this.bundle = new ReviewCycleNotificationBundle(contentLabel, contentId, dueDate, ownerName);
+        setPayload(bundle);
+    }
+
+    @Override
+    protected Iterable<? extends Subscriber> getSubscribers() {
+        // Return the watchers of this payload
+        return Query
+            .from(Content.class)
+            .where("_id = ?", getPayload().getContentId())
+            .first().as(WatcherObjectModification.class).getWatchers();
+    }
+}
