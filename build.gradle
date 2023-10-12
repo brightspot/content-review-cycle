@@ -9,4 +9,5 @@ dependencies {
     api 'com.psddev:dari-db'
     api 'com.psddev:dari-util'
     api 'com.psddev:watch'
+    api 'com.brightspot.go:lib-util-edit-top-html'
 }

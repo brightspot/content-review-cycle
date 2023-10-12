@@ -21,6 +21,7 @@ brightspot {
 
     versions {
         brightspot = '4.5.15.8'
+        brightspotGo = '0.17.2'
         java = 11
     }
 }
