@@ -1,9 +1,10 @@
 package brightspot.reviewcycle.notification;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import brightspot.reviewcycle.CalendarField;
@@ -37,23 +38,51 @@ public class ReviewCycleDueWarningDuration extends Record implements ReviewCycle
     }
 
     public Date subtractCycleDuration(Date now, ReviewCycleDueWarningDuration durationValues) {
+        ZonedDateTime lastDueZoned;
+
+        int calendarField = durationValues.getCalendarField().getCalendarField();
+        int calendarFieldCount = durationValues.getCalendarFieldCount();
+
         if (now == null) {
-            now = new Date();
+            lastDueZoned = ZonedDateTime.now(ZoneId.of("UTC"));
+        } else {
+            lastDueZoned = ZonedDateTime.ofInstant(now.toInstant(),
+                    ZoneId.of("UTC"));
         }
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(now);
-        calendar.add(durationValues.getCalendarField().getCalendarField(), -1 * durationValues.getCalendarFieldCount());
-        return calendar.getTime();
+
+        if (calendarField == Calendar.DAY_OF_MONTH) {
+            lastDueZoned.minusDays(calendarFieldCount);
+        } else if (calendarField == Calendar.WEEK_OF_MONTH) {
+            lastDueZoned.minusWeeks(calendarFieldCount);
+        } else {
+            lastDueZoned.minusMonths(calendarFieldCount);
+        }
+
+        return Date.from(lastDueZoned.toInstant());
     }
 
     public static Date addCycleDuration(Date now, ReviewCycleDueWarningDuration durationValues) {
+        ZonedDateTime lastDueZoned;
+
+        int calendarField = durationValues.getCalendarField().getCalendarField();
+        int calendarFieldCount = durationValues.getCalendarFieldCount();
+
         if (now == null) {
-            now = new Date();
+            lastDueZoned = ZonedDateTime.now(ZoneId.of("UTC"));
+        } else {
+            lastDueZoned = ZonedDateTime.ofInstant(now.toInstant(),
+                    ZoneId.of("UTC"));
         }
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(now);
-        calendar.add(durationValues.getCalendarField().getCalendarField(), durationValues.getCalendarFieldCount());
-        return calendar.getTime();
+
+        if (calendarField == Calendar.DAY_OF_MONTH) {
+            lastDueZoned.plusDays(calendarFieldCount);
+        } else if (calendarField == Calendar.WEEK_OF_MONTH) {
+            lastDueZoned.plusWeeks(calendarFieldCount);
+        } else {
+            lastDueZoned.plusMonths(calendarFieldCount);
+        }
+
+        return Date.from(lastDueZoned.toInstant());
     }
 
     public static Predicate getDueWarningPredicate(Date now, List<ReviewCycleDueWarningDuration> dueWarningDurations) {
@@ -65,19 +94,19 @@ public class ReviewCycleDueWarningDuration extends Record implements ReviewCycle
         for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
             currentInstant = addCycleDuration(now, dueWarningDuration).toInstant();
             currentPredicate = PredicateParser.Static.parse(
-                ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                    + " != missing && "
-                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                    + " = ?",
-                Date.from(currentInstant));
+                    ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                            + " != missing && "
+                            + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                            + " = ?",
+                    Date.from(currentInstant));
 
             if (compound == null) {
                 compound = currentPredicate;
             } else {
                 compound = CompoundPredicate.combine(
-                    PredicateParser.OR_OPERATOR,
-                    compound,
-                    currentPredicate);
+                        PredicateParser.OR_OPERATOR,
+                        compound,
+                        currentPredicate);
             }
         }
         return compound;
@@ -87,9 +116,9 @@ public class ReviewCycleDueWarningDuration extends Record implements ReviewCycle
     public static Predicate getBannerDueWarningPredicate(Date now, ReviewCycleDueWarningDuration dueWarningDuration) {
         Date dueSoon = ReviewCycleDueWarningDuration.addCycleDuration(now, dueWarningDuration);
         return PredicateParser.Static.parse(
-            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing && "
-                + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " <= ? ",
-            dueSoon.getTime());
+                ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing && "
+                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " <= ? ",
+                dueSoon.getTime());
     }
 
     @Override
