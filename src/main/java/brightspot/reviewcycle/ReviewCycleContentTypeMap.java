@@ -11,6 +11,11 @@ import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
 import com.psddev.dari.web.WebRequest;
 
+/**
+ * The ReviewCycleContentMap is associated with a specific content type and its cycle duration. Each
+ * ReviewCycleContentMap will contain a cycleDuration and a dueWarningDuration that are either filled in or inherited
+ * from the default values.
+ */
 @Recordable.Embedded
 @Recordable.DisplayName("Content Type Map")
 public class ReviewCycleContentTypeMap extends Record {

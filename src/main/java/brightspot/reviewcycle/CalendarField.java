@@ -2,6 +2,9 @@ package brightspot.reviewcycle;
 
 import java.util.Calendar;
 
+/**
+ * Enum used in Due Warning Duration and Duration For Content for distinction between days monthhs and years
+ */
 public enum CalendarField {
 
     DAYS("day(s)", Calendar.DATE),

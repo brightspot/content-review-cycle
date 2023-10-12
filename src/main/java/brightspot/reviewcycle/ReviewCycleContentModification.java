@@ -20,6 +20,11 @@ import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.State;
 
+/**
+ * When a content type inherits the HasReviewCycle marker interface, this ReviewCycleContentModification will be seen
+ * in the overrides tab. You will be able to override the cycle duration (an article with a cycle duration of 1
+ * month will be overriden by whatever is chosen here)
+ */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleContentModification.FIELD_PREFIX)
 @DynamicTypeClass(ReviewCycleGlobalDynamicType.class)
 public class ReviewCycleContentModification extends Modification<HasReviewCycle> {

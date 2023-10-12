@@ -28,6 +28,12 @@ import com.psddev.dari.web.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * ReviewCycleSiteSettings is a modification of site that is shown in the CMS tab under Review Cycle. This will set the
+ * default cycle duration along with the default due warning duration.This is where the list of content type maps are
+ * chosen. If you save an empty content type map then the values from the default cycle duration and default due warning
+ * duration will be chosen. This can be overriden by the ReviewCycleContentModification.
+ */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleSiteSettings.FIELD_PREFIX)
 public class ReviewCycleSiteSettings extends Modification<Site> {
 

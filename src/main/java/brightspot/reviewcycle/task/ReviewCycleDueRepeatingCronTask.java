@@ -23,6 +23,10 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This ReviewCycleDueRepeatingCronTask publishes notifications of content that is due or has a warning, both overriden
+ * and non-overriden content. This task is set to repeat once per day.
+ */
 public class ReviewCycleDueRepeatingCronTask extends RepeatingTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleDueRepeatingCronTask.class);

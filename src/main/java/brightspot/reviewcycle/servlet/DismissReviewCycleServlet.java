@@ -17,6 +17,9 @@ import com.psddev.dari.web.annotation.WebPath;
 import com.psddev.dari.web.annotation.WebPathGroup;
 import org.apache.http.HttpHeaders;
 
+/**
+ * This class handles when a user chooses the option to dismiss a review of a content type.
+ */
 @WebPathGroup("cms")
 @WebPath(DismissReviewCycleServlet.PATH)
 public class DismissReviewCycleServlet extends AbstractWebPage {

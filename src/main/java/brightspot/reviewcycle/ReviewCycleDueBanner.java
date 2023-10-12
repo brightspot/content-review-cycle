@@ -27,6 +27,9 @@ import com.psddev.dari.web.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * ReviewCycleDueBanner is associated with the banner shown at the top of the content type ready for review.
+ */
 public class ReviewCycleDueBanner implements EditTopHtml {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleDueBanner.class);
