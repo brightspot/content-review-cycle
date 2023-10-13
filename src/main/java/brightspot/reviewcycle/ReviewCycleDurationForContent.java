@@ -11,7 +11,7 @@ import com.psddev.dari.db.Record;
  * This file is associated with the cycle duration for a content type. It utillizes CalendarField enum which can be a
  * specific amount of days, months, or years.
  */
-public class ReviewCycleDurationForContent extends Record implements ReviewCycleDuration {
+public class ReviewCycleDurationForContent extends Record {
 
     private CalendarField calendarField;
     private int calendarFieldCount;
@@ -28,7 +28,6 @@ public class ReviewCycleDurationForContent extends Record implements ReviewCycle
         return calendarField;
     }
 
-    @Override
     public int getCalendarFieldCount() {
         return calendarFieldCount;
     }

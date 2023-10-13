@@ -19,7 +19,7 @@ import com.psddev.dari.db.Record;
  * This file is associated with the due warning duration for a content type. It utillizes CalendarField enum which can
  * be a specific amount of days, months, or years.
  */
-public class ReviewCycleDueWarningDuration extends Record implements ReviewCycleDuration {
+public class ReviewCycleDueWarningDuration extends Record {
 
     private CalendarField calendarField;
     private int calendarFieldCount;
@@ -36,7 +36,6 @@ public class ReviewCycleDueWarningDuration extends Record implements ReviewCycle
         return calendarField;
     }
 
-    @Override
     public int getCalendarFieldCount() {
         return calendarFieldCount;
     }
