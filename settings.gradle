@@ -13,15 +13,18 @@ pluginManagement {
 }
 
 plugins {
-    id 'com.brightspot.gradle' version '1.0.0-rc24'
+    id 'com.brightspot.gradle' version '1.0.0-rc28'
 }
+
+rootProject.name = 'content-freshness'
 
 brightspot {
     projectGroup = 'com.brightspot'
 
     versions {
         brightspot = '4.5.15.8'
-        brightspotGo = '0.17.2'
-        java = 11
+        brightspotGo = '1.4.3'
+        java = 8
+        enforcePlatform = false
     }
 }
