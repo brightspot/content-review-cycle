@@ -10,9 +10,14 @@ import com.google.common.base.Preconditions;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.History;
 import com.psddev.cms.db.Workflow;
+import com.psddev.cms.ui.ToolRequest;
 import com.psddev.dari.db.Query;
 import com.psddev.dari.db.State;
 import com.psddev.dari.util.ObjectUtils;
+import com.psddev.dari.util.RoutingFilter;
+import com.psddev.dari.web.UrlBuilder;
+import com.psddev.dari.web.WebRequest;
+import org.apache.commons.lang3.StringUtils;
 
 public final class Utils {
     private Utils() {
@@ -99,5 +104,22 @@ public final class Utils {
         );
 
         return diffs;
+    }
+
+    public static UrlBuilder fullyQualifiedCmsUrlBuilder(String path) {
+
+        UrlBuilder urlBuilder = null;
+
+        if (WebRequest.isAvailable()) {
+            urlBuilder = WebRequest.getCurrent().as(ToolRequest.class).getPathBuilder(path);
+        }
+
+        if (urlBuilder == null) {
+            urlBuilder = new UrlBuilder(
+                    RoutingFilter.Static.getApplicationPath("cms") + StringUtils.prependIfMissing(path, "/")
+            );
+        }
+
+        return urlBuilder;
     }
 }

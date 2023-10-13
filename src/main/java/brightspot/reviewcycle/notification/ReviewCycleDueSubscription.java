@@ -2,6 +2,7 @@ package brightspot.reviewcycle.notification;
 
 import java.text.SimpleDateFormat;
 
+import brightspot.reviewcycle.Utils;
 import com.psddev.cms.notification.ToolSubscription;
 import com.psddev.cms.notification.ToolUserOnlySubscription;
 import com.psddev.cms.ui.ToolRequest;
@@ -37,7 +38,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
             String formatting = ": ";
             String contentName = payload.getContentLabel();
 
-            String redirectUrl = fullyQualifiedCmsUrlBuilder("/content/edit.jsp")
+            String redirectUrl = Utils.fullyQualifiedCmsUrlBuilder("/content/edit.jsp")
                 .addParameter("id", payload.getContentId())
                 .build();
 
@@ -53,23 +54,5 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
         }
 
         return super.toHtmlFormat(subscriber, payload);
-    }
-
-    //TODO: move this somewhere else
-    public static UrlBuilder fullyQualifiedCmsUrlBuilder(String path) {
-
-        UrlBuilder urlBuilder = null;
-
-        if (WebRequest.isAvailable()) {
-            urlBuilder = WebRequest.getCurrent().as(ToolRequest.class).getPathBuilder(path);
-        }
-
-        if (urlBuilder == null) {
-            urlBuilder = new UrlBuilder(
-                RoutingFilter.Static.getApplicationPath("cms") + StringUtils.prependIfMissing(path, "/")
-            );
-        }
-
-        return urlBuilder;
     }
 }
