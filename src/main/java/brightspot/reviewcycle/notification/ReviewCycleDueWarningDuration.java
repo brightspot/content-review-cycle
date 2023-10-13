@@ -9,7 +9,6 @@ import java.util.List;
 
 import brightspot.reviewcycle.CalendarField;
 import brightspot.reviewcycle.ReviewCycleContentModification;
-import brightspot.reviewcycle.ReviewCycleDuration;
 import com.psddev.dari.db.CompoundPredicate;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
