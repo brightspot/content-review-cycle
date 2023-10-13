@@ -13,10 +13,10 @@ args+=(-PmavenPassword="$MAVEN_PASSWORD")
 
 args+=(clean)
 args+=(build)
+args+=(publish)
 
 if [[ $GITHUB_ACTIONS_TAG =~ ^v[0-9]+\. ]]; then
   args+=(-Prelease="${GITHUB_ACTIONS_TAG#v}")
-  args+=(publish)
 fi
 
 ./gradlew "${args[@]}"
