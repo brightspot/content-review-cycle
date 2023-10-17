@@ -3,8 +3,11 @@ package brightspot.reviewcycle.notification;
 import java.text.SimpleDateFormat;
 
 import brightspot.reviewcycle.Utils;
+import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.notification.ToolSubscription;
 import com.psddev.cms.notification.ToolUserOnlySubscription;
+import com.psddev.cms.ui.LocalizationContext;
+import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Recordable;
 import com.psddev.dari.html.Nodes;
@@ -33,6 +36,20 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
             String formatting = ": ";
             String contentName = payload.getContentLabel();
 
+            String defaultText = prefix + siteName + body + dateString + formatting;
+
+            String localized = ToolLocalization.text(
+                    new LocalizationContext(
+                            ReviewCycleDueSubscription.class,
+                            ImmutableMap.of(
+                                    "siteName", payload.getOwnerName(),
+                                    "dateString", dateFormat.format(payload.getDueDate()),
+                                    "contentLabel", payload.getContentLabel()
+                            )
+                    ),
+                    "label.reviewDue",
+                    defaultText);
+
             String redirectUrl = Utils.fullyQualifiedCmsUrlBuilder("/content/edit.jsp")
                 .addParameter("id", payload.getContentId())
                 .build();
@@ -43,7 +60,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
                 .with(contentName);
 
             return Nodes.P
-                .with(prefix + siteName + body + dateString + formatting)
+                .with(localized)
                 .with(link)
                 .toString();
         }
