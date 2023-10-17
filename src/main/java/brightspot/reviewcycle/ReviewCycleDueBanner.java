@@ -3,7 +3,6 @@ package brightspot.reviewcycle;
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,12 +11,9 @@ import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import brightspot.reviewcycle.servlet.DismissReviewCycleServlet;
 import brightspot.reviewcycle.servlet.StartReviewServlet;
 import com.psddev.cms.db.Content;
-import com.psddev.cms.db.Site;
-import com.psddev.cms.db.SiteSettings;
 import com.psddev.cms.tool.ToolPageContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
-import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.PredicateParser;
 import com.psddev.dari.db.Query;
 import com.psddev.dari.db.Recordable;
@@ -66,33 +62,10 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             .orElse(null);
 
         // First, get the due warning duration from content type, then fall back to default due warning duration if null.
-        Site site = reviewCycleContent.as(Site.ObjectModification.class).getOwner();
-
-        String contentType = Optional.of(reviewCycleContent)
-            .map(content -> content.as(ReviewCycleContentModification.class))
-            .map(ReviewCycleContentModification::getReviewCycleMap)
-            .map(ReviewCycleContentTypeMap::getContentType)
-            .map(ObjectType::getDisplayName)
-            .orElse(null);
-
-        List<ReviewCycleContentTypeMap> mapsList = SiteSettings
-            .get(site, s -> s.as(ReviewCycleSiteSettings.class)
-            .getContentTypeMaps());
-
-        ReviewCycleDueWarningDuration dueWarningDuration = mapsList
-            .stream()
-            .filter(c -> map.getContentType().getDisplayName().equals(contentType))
-            .findFirst()
-            .map(ReviewCycleContentTypeMap::getDueWarningDuration)
-            .orElse(null);
-
-        ReviewCycleDueWarningDuration durationChoice = dueWarningDuration;
-
-        ReviewCycleDueWarningDuration defaultDueWarningDuration = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite().as(ReviewCycleSiteSettings.class).getReviewCycleDueWarningDuration();
-
-        if (dueWarningDuration == null) {
-            durationChoice = defaultDueWarningDuration;
-        }
+        ReviewCycleDueWarningDuration defaultDueWarningDuration = WebRequest.getCurrent()
+                .as(ToolRequest.class)
+                .getCurrentSite().as(ReviewCycleSiteSettings.class)
+                .getReviewCycleDueWarningDuration();
 
         if (map != null) {
             Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
@@ -101,7 +74,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
                 this.writeBanner(reviewCycleContent, page, true);
             } else if (PredicateParser.Static.evaluate(
                 item,
-                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, durationChoice))) {
+                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, defaultDueWarningDuration))) {
                 this.writeBanner(reviewCycleContent, page, false);
             }
         }

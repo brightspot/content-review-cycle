@@ -2,7 +2,6 @@ package brightspot.reviewcycle;
 
 import java.util.Date;
 
-import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
@@ -15,8 +14,8 @@ import com.psddev.dari.web.WebRequest;
 
 /**
  * The ReviewCycleContentMap is associated with a specific content type and its cycle duration. Each
- * ReviewCycleContentTypeMap will contain a @see {@link #getCycleDuration()} and a @see {@link #getDueWarningDuration()}
- * that are either filled in or inherited from the default values.
+ * ReviewCycleContentTypeMap will contain a @see {@link #getCycleDuration()} that is either filled in or inherited
+ * from the default values.
  */
 @Recordable.Embedded
 @Recordable.DisplayName("Content Type Map")
@@ -36,14 +35,8 @@ public class ReviewCycleContentTypeMap extends Record {
 
     private ReviewCycleDurationForContent cycleDuration;
 
-    private ReviewCycleDueWarningDuration dueWarningDuration;
-
     @Override
     public void beforeSave() {
-        if (getDueWarningDuration() == null) {
-            setDueWarningDuration(getDefaultDueWarningFallback());
-        }
-
         if (getCycleDuration() == null) {
             setCycleDuration(getDefaultCycleDurationFallback());
         }
@@ -63,18 +56,6 @@ public class ReviewCycleContentTypeMap extends Record {
 
     public void setCycleDuration(ReviewCycleDurationForContent cycleDuration) {
         this.cycleDuration = cycleDuration;
-    }
-
-    public ReviewCycleDueWarningDuration getDueWarningDuration() {
-        return dueWarningDuration;
-    }
-
-    public void setDueWarningDuration(ReviewCycleDueWarningDuration dueWarningDuration) {
-        this.dueWarningDuration = dueWarningDuration;
-    }
-
-    private ReviewCycleDueWarningDuration getDefaultDueWarningFallback() {
-        return WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite().as(ReviewCycleSiteSettings.class).getReviewCycleDueWarningDuration();
     }
 
     private ReviewCycleDurationForContent getDefaultCycleDurationFallback() {

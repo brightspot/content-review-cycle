@@ -52,15 +52,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     value,
                     siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getContentTypeMaps());
 
-            List<ReviewCycleDurationForContent> durations = new ArrayList<>();
-            for (ReviewCycleContentTypeMap contentMap : contentMaps) {
-                durations.add(contentMap.getCycleDuration());
-            }
-
-            List<ReviewCycleDueWarningDuration> dueWarnings = new ArrayList<>();
-            for (ReviewCycleContentTypeMap contentMap : contentMaps) {
-                dueWarnings.add(contentMap.getDueWarningDuration());
-            }
+            List<ReviewCycleDueWarningDuration> dueWarnings = Query.from(ReviewCycleDueWarningDuration.class).selectAll();
 
             LOGGER.info("ContentMaps size: " + contentMaps.size());
 
@@ -101,6 +93,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             LOGGER.info("Searching cycle overrides configured content...");
             // Handle cycle overrides
+
+            List<ReviewCycleDurationForContent> durations = Query.from(ReviewCycleDurationForContent.class).selectAll();
 
             for (ReviewCycleDurationForContent duration : durations) {
 
@@ -144,13 +138,13 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             LOGGER.info("Sending Notification for " + content.getLabel());
             // Calculate date
             nextDue = content
-                .as(ReviewCycleContentModification.class)
-                .getNextReviewDateIndex();
+                    .as(ReviewCycleContentModification.class)
+                    .getNextReviewDateIndex();
             new ReviewCycleDueNotification(
-                content.getLabel(),
-                content.getId(),
-                nextDue,
-                content.as(Site.ObjectModification.class).getOwner().getName()).publish();
+                    content.getLabel(),
+                    content.getId(),
+                    nextDue,
+                    content.as(Site.ObjectModification.class).getOwner().getName()).publish();
         }
     }
 
@@ -166,9 +160,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         if (getSite() != null) {
             return CompoundPredicate.combine(
-                PredicateParser.AND_OPERATOR,
-                validSites,
-                PredicateParser.Static.parse("cms.site.owner = ?", getSite()));
+                    PredicateParser.AND_OPERATOR,
+                    validSites,
+                    PredicateParser.Static.parse("cms.site.owner = ?", getSite()));
 
         } else {
             return validSites;

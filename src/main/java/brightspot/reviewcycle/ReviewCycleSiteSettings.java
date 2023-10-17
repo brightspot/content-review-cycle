@@ -55,7 +55,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
     @Required
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @DisplayName("Default Due Warning Duration")
+    @DisplayName("Due Warning Duration")
     private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
 
     @Tab(REVIEW_CYCLE_TAB)
@@ -63,20 +63,20 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
     @InternalName(ReviewCycleSiteSettings.CONTENT_TYPE_MAPS_FIELD)
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
 
-    public ReviewCycleDueWarningDuration getReviewCycleDueWarningDuration() {
-        return reviewCycleDueWarningDuration;
-    }
-
-    public void setReviewCycleDueWarningDuration(ReviewCycleDueWarningDuration reviewCycleDueWarningDuration) {
-        this.reviewCycleDueWarningDuration = reviewCycleDueWarningDuration;
-    }
-
     public ReviewCycleDurationForContent getReviewCycleDurationForContent() {
         return reviewCycleDurationForContent;
     }
 
     public void setReviewCycleDurationForContent(ReviewCycleDurationForContent reviewCycleDurationForContent) {
         this.reviewCycleDurationForContent = reviewCycleDurationForContent;
+    }
+
+    public ReviewCycleDueWarningDuration getReviewCycleDueWarningDuration() {
+        return reviewCycleDueWarningDuration;
+    }
+
+    public void setReviewCycleDueWarningDuration(ReviewCycleDueWarningDuration reviewCycleDueWarningDuration) {
+        this.reviewCycleDueWarningDuration = reviewCycleDueWarningDuration;
     }
 
     public List<ReviewCycleContentTypeMap> getContentTypeMaps() {

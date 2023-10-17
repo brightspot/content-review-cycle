@@ -9,6 +9,10 @@ import java.util.List;
 
 import brightspot.reviewcycle.CalendarField;
 import brightspot.reviewcycle.ReviewCycleContentModification;
+import brightspot.reviewcycle.ReviewCycleDurationForContent;
+import com.google.common.collect.ImmutableMap;
+import com.psddev.cms.ui.LocalizationContext;
+import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.dari.db.CompoundPredicate;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
@@ -125,6 +129,11 @@ public class ReviewCycleDueWarningDuration extends Record {
 
     @Override
     public String getLabel() {
-        return "Every " + getCalendarFieldCount() + " " + getCalendarField().toString();
+        String defaultText = "Every " + getCalendarFieldCount() + " " + getCalendarField().toString();
+        return ToolLocalization.text(
+                new LocalizationContext(ReviewCycleDurationForContent.class,
+                        ImmutableMap.of("calendarFieldCount", getCalendarFieldCount(), "calendarFieldName", getCalendarField().toString())),
+                "label.duration",
+                defaultText);
     }
 }
