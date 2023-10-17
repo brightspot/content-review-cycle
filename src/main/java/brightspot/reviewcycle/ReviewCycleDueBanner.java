@@ -97,7 +97,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
                 .with(Nodes.SPAN.with(message))
                 .with(Nodes.A.href(createDismissReviewServletUrl(item))
                 .with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.cancelReview", "Cancel this review")))
-                .with(Nodes.SPAN.with(" OR "))
+                .with(Nodes.SPAN.with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.OR", " OR ")))
                 .with(Nodes.A
                     .href(createStartReviewServletUrl(item))
                     .target("content-edit-new-draft")

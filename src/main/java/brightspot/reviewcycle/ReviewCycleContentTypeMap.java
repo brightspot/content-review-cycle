@@ -2,7 +2,8 @@ package brightspot.reviewcycle;
 
 import java.util.Date;
 
-import brightspot.reviewcycle.widget.ReviewActivityWidget;
+import com.google.common.collect.ImmutableMap;
+import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
 import com.psddev.dari.db.ObjectType;
@@ -80,7 +81,12 @@ public class ReviewCycleContentTypeMap extends Record {
         String defaultText = this.getContentType().getDisplayName() + " - " + "Every " + calenderFieldCount + " "
                 + timePeriod;
 
-        return ToolLocalization.text(ReviewActivityWidget.class, "label.duration", defaultText);
+        return ToolLocalization.text(
+                new LocalizationContext(
+                        ReviewCycleContentTypeMap.class,
+                        ImmutableMap.of("displayName", this.getContentType().getDisplayName(), "calendarFieldCount", calenderFieldCount, "timePeriod", timePeriod)),
+                "label.contentTypeMap",
+                defaultText);
     }
 
     // Using "next date"
