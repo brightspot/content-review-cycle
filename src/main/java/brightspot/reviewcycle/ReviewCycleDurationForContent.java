@@ -5,7 +5,6 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.dari.db.Record;
 

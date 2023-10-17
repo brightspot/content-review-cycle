@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import brightspot.reviewcycle.ReviewCycleContentModification;
-import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.History;
 import com.psddev.cms.db.ToolUser;

@@ -11,7 +11,6 @@ import brightspot.core.tool.EditTopHtml;
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import brightspot.reviewcycle.servlet.DismissReviewCycleServlet;
 import brightspot.reviewcycle.servlet.StartReviewServlet;
-import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Site;
 import com.psddev.cms.db.SiteSettings;

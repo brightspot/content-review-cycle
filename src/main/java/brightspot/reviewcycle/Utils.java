@@ -61,7 +61,6 @@ public final class Utils {
             && state.as(Workflow.Data.class).getCurrentState() == null;
     }
 
-    // Taken from com.psddev.dari.util.UnresolvedState.resolve
     static <T> T resolve(T object) {
 
         if (object == null) {
@@ -77,12 +76,10 @@ public final class Utils {
         }
     }
 
-    // Taken from RecordableUtils.computeDelta
     public static Map<String, Object> computeDelta(Object source, Object target) {
         return computeDelta(new History(null, source), new History(null, target));
     }
 
-    // Taken from RecordableUtils.computeDelta
     public static Map<String, Object> computeDelta(History source, History target) {
 
         Map<String, Object> currentOriginals = source.getObjectOriginals();
