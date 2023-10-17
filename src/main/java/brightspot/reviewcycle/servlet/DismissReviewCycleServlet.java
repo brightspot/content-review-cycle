@@ -6,9 +6,11 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import brightspot.reviewcycle.ReviewCycleContentModification;
+import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.History;
 import com.psddev.cms.db.ToolUser;
+import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
 import com.psddev.dari.db.Query;
 import com.psddev.dari.web.AbstractWebPage;
@@ -53,8 +55,8 @@ public class DismissReviewCycleServlet extends AbstractWebPage {
             // Create revision history element
             ToolUser currentUser = WebRequest.getCurrent().as(ToolRequest.class).getCurrentUser();
             History dismissedHistory = new History(currentUser, dismissedContent);
-            dismissedHistory.setName("Review dismissed");
-
+            dismissedHistory.setName(ToolLocalization.text(DismissReviewCycleServlet.class,
+                    "label.reviewDismissed", "Review dismissed"));
             dismissedHistory.saveImmediately();
             dismissedContent.saveImmediately();
 

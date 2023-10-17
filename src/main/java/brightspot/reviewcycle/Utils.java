@@ -34,7 +34,7 @@ public final class Utils {
 
         State existingState = State.getInstance(existingObject);
 
-        /**
+        /*
          * This Object is already published if:
          * - It already exists in the database
          * - AND the database object is not in draft
@@ -47,7 +47,7 @@ public final class Utils {
             && !existingState.as(Content.ObjectModification.class).isTrash()
             && existingState.as(Workflow.Data.class).getCurrentState() == null;
 
-        /**
+        /*
          * This Object is about to be published for the first time if:
          * - Object is not already published (above)
          * - AND it is not in draft

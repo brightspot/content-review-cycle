@@ -11,10 +11,12 @@ import brightspot.core.tool.EditTopHtml;
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import brightspot.reviewcycle.servlet.DismissReviewCycleServlet;
 import brightspot.reviewcycle.servlet.StartReviewServlet;
+import brightspot.reviewcycle.widget.ReviewActivityWidget;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Site;
 import com.psddev.cms.db.SiteSettings;
 import com.psddev.cms.tool.ToolPageContext;
+import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.PredicateParser;
@@ -115,15 +117,19 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             message = "The content in this item is DUE for review: ";
         }
 
+        ToolLocalization.text(ReviewCycleDueBanner.class, "label.messageLevel", messageLevel);
+        ToolLocalization.text(ReviewCycleDueBanner.class, "label.message", message);
+
         FlowFlowElement bannerMessage = Nodes.DIV.className(messageLevel)
             .with(Nodes.P
                 .with(Nodes.SPAN.with(message))
-                .with(Nodes.A.href(createDismissReviewServletUrl(item)).with("Cancel this review"))
+                .with(Nodes.A.href(createDismissReviewServletUrl(item))
+                .with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.cancelReview", "Cancel this review")))
                 .with(Nodes.SPAN.with(" OR "))
                 .with(Nodes.A
                     .href(createStartReviewServletUrl(item))
                     .target("content-edit-new-draft")
-                    .with("Start a review"))
+                    .with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.startReview", "Start a review")))
             );
 
         try {

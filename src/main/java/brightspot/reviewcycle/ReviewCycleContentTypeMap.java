@@ -3,6 +3,8 @@ package brightspot.reviewcycle;
 import java.util.Date;
 
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
+import brightspot.reviewcycle.widget.ReviewActivityWidget;
+import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Predicate;
@@ -94,7 +96,10 @@ public class ReviewCycleContentTypeMap extends Record {
 
         int calenderFieldCount = getCycleDuration().getCalendarFieldCount();
 
-        return this.getContentType().getDisplayName() + " - " + "Every " + calenderFieldCount + " " + timePeriod;
+        String defaultText = this.getContentType().getDisplayName() + " - " + "Every " + calenderFieldCount + " "
+                + timePeriod;
+
+        return ToolLocalization.text(ReviewActivityWidget.class, "label.duration", defaultText);
     }
 
     // Using "next date"
