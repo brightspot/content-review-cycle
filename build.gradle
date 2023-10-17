@@ -1,5 +1,11 @@
 plugins {
-    id 'com.brightspot.java-library'
+    id 'com.brightspot.java-core'
+    id 'com.brightspot.artifactory-publish'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 description = 'Content Freshness'
