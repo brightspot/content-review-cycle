@@ -9,7 +9,6 @@ import java.util.List;
 
 import brightspot.reviewcycle.CalendarField;
 import brightspot.reviewcycle.ReviewCycleContentModification;
-import brightspot.reviewcycle.ReviewCycleDuration;
 import com.psddev.dari.db.CompoundPredicate;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
@@ -54,11 +53,11 @@ public class ReviewCycleDueWarningDuration extends Record {
         }
 
         if (calendarField == Calendar.DAY_OF_MONTH) {
-            lastDueZoned.minusDays(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusDays(calendarFieldCount);
         } else if (calendarField == Calendar.WEEK_OF_MONTH) {
-            lastDueZoned.minusWeeks(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusWeeks(calendarFieldCount);
         } else {
-            lastDueZoned.minusMonths(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusMonths(calendarFieldCount);
         }
 
         return Date.from(lastDueZoned.toInstant());
@@ -78,11 +77,11 @@ public class ReviewCycleDueWarningDuration extends Record {
         }
 
         if (calendarField == Calendar.DAY_OF_MONTH) {
-            lastDueZoned.plusDays(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusDays(calendarFieldCount);
         } else if (calendarField == Calendar.WEEK_OF_MONTH) {
-            lastDueZoned.plusWeeks(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusWeeks(calendarFieldCount);
         } else {
-            lastDueZoned.plusMonths(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusMonths(calendarFieldCount);
         }
 
         return Date.from(lastDueZoned.toInstant());

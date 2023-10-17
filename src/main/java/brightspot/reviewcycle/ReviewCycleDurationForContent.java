@@ -43,11 +43,11 @@ public class ReviewCycleDurationForContent extends Record {
         }
 
         if (this.getCalendarField().getCalendarField() == Calendar.DAY_OF_MONTH) {
-            lastDueZoned.minusDays(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusDays(calendarFieldCount);
         } else if (this.getCalendarField().getCalendarField() == Calendar.WEEK_OF_MONTH) {
-            lastDueZoned.minusWeeks(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusWeeks(calendarFieldCount);
         } else {
-            lastDueZoned.minusMonths(calendarFieldCount);
+            lastDueZoned = lastDueZoned.minusMonths(calendarFieldCount);
         }
 
         return Date.from(lastDueZoned.toInstant());
@@ -55,7 +55,6 @@ public class ReviewCycleDurationForContent extends Record {
 
     public Date addCycleDuration(Date lastDue) {
         ZonedDateTime lastDueZoned;
-
         if (lastDue == null) {
             lastDueZoned = ZonedDateTime.now(ZoneId.of("UTC"));
         } else {
@@ -64,11 +63,11 @@ public class ReviewCycleDurationForContent extends Record {
         }
 
         if (this.getCalendarField().getCalendarField() == Calendar.DAY_OF_MONTH) {
-            lastDueZoned.plusDays(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusDays(calendarFieldCount);
         } else if (this.getCalendarField().getCalendarField() == Calendar.WEEK_OF_MONTH) {
-            lastDueZoned.plusWeeks(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusWeeks(calendarFieldCount);
         } else {
-            lastDueZoned.plusMonths(calendarFieldCount);
+            lastDueZoned = lastDueZoned.plusMonths(calendarFieldCount);
         }
 
         return Date.from(lastDueZoned.toInstant());
