@@ -16,7 +16,6 @@ import com.psddev.cms.db.ToolUser;
 import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
-import com.psddev.cms.ui.form.DynamicNoteMethod;
 import com.psddev.dari.db.Grouping;
 import com.psddev.dari.db.Modification;
 import com.psddev.dari.db.ObjectType;
@@ -32,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * ReviewCycleSiteSettings is a modification of site that is shown in the CMS tab under Review Cycle. This will set the
  * default cycle duration along with the default due warning duration.This is where the list of content type maps are
  * chosen. If you save an empty content type map then the values from the default cycle duration and default due warning
- * duration will be chosen. This can be overriden by the ReviewCycleContentModification.
+ * duration will be chosen. This can be overriden by the @see {@link ReviewCycleContentModification}.
  */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleSiteSettings.FIELD_PREFIX)
 public class ReviewCycleSiteSettings extends Modification<Site> {
@@ -61,7 +60,6 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @DynamicNoteMethod("getOneOffTypeConfigurations")
     @InternalName(ReviewCycleSiteSettings.CONTENT_TYPE_MAPS_FIELD)
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
 
@@ -98,7 +96,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
         if (getState().isNew()) {
             return;
         }
-        // fetch original from database to check for changes and recalculate
+        // Fetch original from database to check for changes and recalculate
         Site databaseSite = ((Site) Query.fromAll()
             .where("_id = ?", getOriginalObject().getId())
             .first());
@@ -135,7 +133,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
         for (ReviewCycleContentTypeMap map : this.getContentTypeMaps()) {
             if (recordType.contains(map.getContentType())) {
-                // content type already seclected, throw error
+                // If the content type is already selected, throw an error
                 getState().addError(
                     getState().getField(
                         ReviewCycleSiteSettings.FIELD_PREFIX + ReviewCycleSiteSettings.CONTENT_TYPE_MAPS_FIELD),

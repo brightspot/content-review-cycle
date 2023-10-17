@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.servlet.ServletException;
 
 import brightspot.reviewcycle.HasReviewCycle;
 import brightspot.reviewcycle.ReviewCycleContentModification;
@@ -59,27 +58,45 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void writeHtml(ToolPageContext page, Dashboard dashboard) throws IOException, ServletException {
+    public void writeHtml(ToolPageContext page, Dashboard dashboard) throws IOException {
 
-        // Check types configured in Sites&Settings and at the content level
+        /** Check types configured in @see {@link brightspot.reviewcycle.ReviewCycleSiteSettings} and at the content level */
         Site site = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite();
 
-        List<ObjectType> configuredObjectTypes = Query.from(HasReviewCycle.class)
-            .where("* matches *")
-            .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
-            .and(site.itemsPredicate())
-            .groupBy("_type")
-            .stream()
-            .map(Grouping::getKeys)
-            .filter(keys -> !keys.isEmpty())
-            .map(key -> key.get(0))
-            .filter(String.class::isInstance)
-            .map(String.class::cast)
-            .map(UuidUtils::fromString)
-            .map(ObjectType::getInstance)
-            .sorted()
-            .collect(Collectors.toList());
+        List<ObjectType> configuredObjectTypes;
+
+        if (site == null) {
+            configuredObjectTypes = Query.from(HasReviewCycle.class)
+                    .where("* matches *")
+                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
+                    .groupBy("_type")
+                    .stream()
+                    .map(Grouping::getKeys)
+                    .filter(keys -> !keys.isEmpty())
+                    .map(key -> key.get(0))
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast)
+                    .map(UuidUtils::fromString)
+                    .map(ObjectType::getInstance)
+                    .sorted()
+                    .collect(Collectors.toList());
+        } else {
+            configuredObjectTypes = Query.from(HasReviewCycle.class)
+                    .where("* matches *")
+                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
+                    .and(site.itemsPredicate())
+                    .groupBy("_type")
+                    .stream()
+                    .map(Grouping::getKeys)
+                    .filter(keys -> !keys.isEmpty())
+                    .map(key -> key.get(0))
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast)
+                    .map(UuidUtils::fromString)
+                    .map(ObjectType::getInstance)
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
 
         // Original type param selector
         ObjectType itemType = ObjectType.getInstance(page.pageParam(UUID.class, "itemType", null));
@@ -123,7 +140,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
             page.writeQueryRestrictionForm(c);
         }
 
-        // type select
+        // Type select
         page.writeStart("form",
             "method", "get",
             "action", page.url(null));
@@ -332,7 +349,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         long days = ChronoUnit.DAYS.between(now.toInstant(), nextReviewDate.toInstant());
 
         if (days >= 0) {
-            // due soon
+            // Due soon
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
                 ImmutableMap.of("days", days)), "label.dueSoon");
@@ -382,7 +399,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
             ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.DAYS);
 
             if (this.getDaysOffset() == 0) {
-                // check if it was due before right now
+                // Check if it was due before right now
                 return PredicateParser.Static.parse(
                     ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
                         + " != missing and "
@@ -390,7 +407,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                         + " < ?", now.toInstant().toEpochMilli());
             } else {
                 ZonedDateTime dueSoon = now.plusDays(this.getDaysOffset());
-                // check if it is due soon but after now
+                // Check if it is due soon but after now
                 return PredicateParser.Static.parse(
                     ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
                         + " != missing and "

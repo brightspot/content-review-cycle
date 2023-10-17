@@ -24,7 +24,6 @@ public final class Utils {
 
     }
 
-    // Taken from brightspot.contentpublishutils.ContentPublishUtils
     static boolean isFirstPublish(Object object) {
 
         Preconditions.checkNotNull(object);
@@ -35,21 +34,27 @@ public final class Utils {
 
         State existingState = State.getInstance(existingObject);
 
-        // this Object is already published if:
-        //  - it already exists in the database
-        //  - AND the database object is not in draft
-        //  - AND the database object is not trashed
-        //  - AND the database object is not in workflow
+        /**
+         * This Object is already published if:
+         * - It already exists in the database
+         * - AND the database object is not in draft
+         * - AND the database object is not trashed
+         * - AND the database object is not in workflow
+         */
+
         boolean isAlreadyPublished = existingObject != null
             && !existingState.as(Content.ObjectModification.class).isDraft()
             && !existingState.as(Content.ObjectModification.class).isTrash()
             && existingState.as(Workflow.Data.class).getCurrentState() == null;
 
-        // this Object is about to be published for the first time if:
-        //  - this Object is not already published (above)
-        //  - AND it is not in draft
-        //  - AND it is not trashed
-        //  - AND it is not in workflow
+        /**
+         * This Object is about to be published for the first time if:
+         * - Object is not already published (above)
+         * - AND it is not in draft
+         * - AND it is not trashed
+         * - AND it is not in workflow
+         */
+
         return !isAlreadyPublished
             && !state.as(Content.ObjectModification.class).isDraft()
             && !state.as(Content.ObjectModification.class).isTrash()

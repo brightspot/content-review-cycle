@@ -3,7 +3,8 @@ package brightspot.reviewcycle;
 import java.util.Calendar;
 
 /**
- * Enum used in Due Warning Duration and Duration For Content for distinction between days monthhs and years
+ * Enum used in @see {@link brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration} and
+ * @see {@link brightspot.reviewcycle.ReviewCycleDurationForContent} for distinction between days, months, and years.
  */
 public enum CalendarField {
 
@@ -11,24 +12,24 @@ public enum CalendarField {
     WEEKS("week(s)", Calendar.WEEK_OF_MONTH),
     MONTHS("month(s)", Calendar.MONTH);
 
-    private final String weeks;
-    private final int calendarField;
+    private final String stringType;
+    private final int type;
 
-    CalendarField(String weeks, int calendarField) {
-        this.weeks = weeks;
-        this.calendarField = calendarField;
+    CalendarField(String stringType, int type) {
+        this.stringType = stringType;
+        this.type = type;
     }
 
-    public String getWeeks() {
-        return weeks;
+    public String getStringType() {
+        return stringType;
     }
 
-    public int getCalendarField() {
-        return calendarField;
+    public int getType() {
+        return type;
     }
 
     @Override
     public String toString() {
-        return getWeeks();
+        return getStringType();
     }
 }

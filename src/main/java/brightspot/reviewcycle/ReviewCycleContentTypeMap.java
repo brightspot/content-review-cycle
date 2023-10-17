@@ -13,8 +13,8 @@ import com.psddev.dari.web.WebRequest;
 
 /**
  * The ReviewCycleContentMap is associated with a specific content type and its cycle duration. Each
- * ReviewCycleContentMap will contain a cycleDuration and a dueWarningDuration that are either filled in or inherited
- * from the default values.
+ * ReviewCycleContentTypeMap will contain a @see {@link #getCycleDuration()} and a @see {@link #getDueWarningDuration()}
+ * that are either filled in or inherited from the default values.
  */
 @Recordable.Embedded
 @Recordable.DisplayName("Content Type Map")
@@ -81,7 +81,7 @@ public class ReviewCycleContentTypeMap extends Record {
 
     @Override
     public String getLabel() {
-        int calendarType = getCycleDuration().getCalendarField().getCalendarField(); //TODO rename
+        int calendarType = getCycleDuration().getCalendarField().getType();
         String timePeriod;
 
         if (calendarType == 5) {
@@ -97,7 +97,7 @@ public class ReviewCycleContentTypeMap extends Record {
         return this.getContentType().getDisplayName() + " - " + "Every " + calenderFieldCount + " " + timePeriod;
     }
 
-    // using "next date"
+    // Using "next date"
     public Predicate getExpiredPredicate(Date now) {
         return PredicateParser.Static.parse(
             ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME

@@ -21,9 +21,9 @@ import com.psddev.dari.db.Record;
 import com.psddev.dari.db.State;
 
 /**
- * When a content type inherits the HasReviewCycle marker interface, this ReviewCycleContentModification will be seen
- * in the overrides tab. You will be able to override the cycle duration (an article with a cycle duration of 1
- * month will be overriden by whatever is chosen here)
+ * When a content type inherits the @see {@link HasReviewCycle} marker interface, this ReviewCycleContentModification
+ * will be seen in the overrides tab. You will be able to override the cycle duration (an article with a cycle duration
+ * of 1 month will be overriden by whatever is chosen here)
  */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleContentModification.FIELD_PREFIX)
 @DynamicTypeClass(ReviewCycleGlobalDynamicType.class)
@@ -61,7 +61,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DynamicNoteMethod("getNextReviewDateIndex")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
-    @ToolUi.ReadOnly
     private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
@@ -99,7 +98,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @ToolUi.Sortable
     @ToolUi.Hidden
     public Date getNextReviewDateIndex() {
-        // or else should do the look up for the date. Truncate whatever is returned
+        // Or else should do the look-up for the date. Truncate whatever is returned
         Date nextReview = Optional.ofNullable(getNextReviewDate()).orElseGet(this::calculateNextReviewDate);
         return Optional.ofNullable(nextReview)
             .map(Date::toInstant)
@@ -143,7 +142,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         }
 
         Date now = new Date();
-        // If firstPublish or Revision publish, set last date.
+        // If firstPublish or Revision publish, set last date
 
         // First Publish
         if (Utils.isFirstPublish(originalObject)) {
@@ -189,7 +188,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             return null;
         }
 
-        // check for override then check sites&settings
+        /** Check for override then check @see {@link ReviewCycleSiteSettings} */
         if (this.getReviewCycleDuration() != null) {
             return new ReviewCycleContentTypeMap(
                 originalObjectType,
@@ -208,13 +207,5 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         }
 
         return null;
-    }
-
-    public Date getTrucatedReviewDate() {
-        return Optional.ofNullable(getReviewDate())
-            .map(Date::toInstant)
-            .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
-            .map(Date::from)
-            .orElse(null);
     }
 }

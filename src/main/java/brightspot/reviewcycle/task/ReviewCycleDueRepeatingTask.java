@@ -24,12 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This ReviewCycleDueRepeatingCronTask publishes notifications of content that is due or has a warning, both overriden
+ * This ReviewCycleDueRepeatingTask publishes notifications of content that is due or has a warning, both overriden
  * and non-overriden content. This task is set to repeat once per day.
  */
-public class ReviewCycleDueRepeatingCronTask extends RepeatingTask {
+public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleDueRepeatingCronTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleDueRepeatingTask.class);
 
     private Site site;
 
@@ -46,14 +46,13 @@ public class ReviewCycleDueRepeatingCronTask extends RepeatingTask {
 
         List<Site> sites = Query.from(Site.class).selectAll();
 
-        for (int i = 0; i < sites.size(); i++) {
+        for (Site value : sites) {
 
             List<ReviewCycleContentTypeMap> contentMaps = SiteSettings.get(
-                sites.get(i),
-                siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getContentTypeMaps());
+                    value,
+                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getContentTypeMaps());
 
             List<ReviewCycleDurationForContent> durations = new ArrayList<>();
-
             for (ReviewCycleContentTypeMap contentMap : contentMaps) {
                 durations.add(contentMap.getCycleDuration());
             }
@@ -81,17 +80,17 @@ public class ReviewCycleDueRepeatingCronTask extends RepeatingTask {
                 LOGGER.info(group + " " + cycleDuration.toString());
 
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
-                    PredicateParser.OR_OPERATOR,
-                    map.getExpiredPredicate(now),
-                    ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
+                        PredicateParser.OR_OPERATOR,
+                        map.getExpiredPredicate(now),
+                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
 
                 // Check for content (that is due or has a warning today) that does not have overrides
                 List<Content> contents = Query.from(Content.class)
-                    .where(map.getTypePredicate())
-                    .and(dueNowOrWarningPredicate)
-                    .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = missing")
-                    .and(getSitePredicate())
-                    .selectAll();
+                        .where(map.getTypePredicate())
+                        .and(dueNowOrWarningPredicate)
+                        .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = missing")
+                        .and(getSitePredicate())
+                        .selectAll();
 
                 LOGGER.info("Contents size: " + contents.size());
 
@@ -107,23 +106,23 @@ public class ReviewCycleDueRepeatingCronTask extends RepeatingTask {
 
                 // Generate predicate
                 Predicate datePredicate = PredicateParser.Static.parse(
-                    ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                        + " != missing and "
-                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                        + " < ?", now.getTime());
+                        ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                + " != missing and "
+                                + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                + " < ?", now.getTime());
 
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
-                    PredicateParser.OR_OPERATOR,
-                    datePredicate,
-                    ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
+                        PredicateParser.OR_OPERATOR,
+                        datePredicate,
+                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
 
                 // Search for all content where the override is not missing and the date for this duration is due
                 overridesList.addAll(Query.from(Content.class)
-                    .where(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
-                    .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = ?", duration)
-                    .and(dueNowOrWarningPredicate)
-                    .and(getSitePredicate())
-                    .selectAll());
+                        .where(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
+                        .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = ?", duration)
+                        .and(dueNowOrWarningPredicate)
+                        .and(getSitePredicate())
+                        .selectAll());
             }
 
             LOGGER.info("Content overrides size: " + overridesList.size());

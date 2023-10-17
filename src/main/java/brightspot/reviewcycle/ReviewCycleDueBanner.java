@@ -64,7 +64,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             .map(ReviewCycleContentModification::getReviewCycleMap)
             .orElse(null);
 
-        // First get due warning duration from content type, then fall back to default due warning duration if null.
+        // First, get the due warning duration from content type, then fall back to default due warning duration if null.
         Site site = reviewCycleContent.as(Site.ObjectModification.class).getOwner();
 
         String contentType = Optional.of(reviewCycleContent)

@@ -15,8 +15,8 @@ import com.psddev.dari.db.PredicateParser;
 import com.psddev.dari.db.Record;
 
 /**
- * This file is associated with the due warning duration for a content type. It utillizes CalendarField enum which can
- * be a specific amount of days, months, or years.
+ * This file is associated with the due warning duration for a content type. It utilizes the
+ * @see {@link CalendarField} enum which can be a specific amount of days, months, or years.
  */
 public class ReviewCycleDueWarningDuration extends Record {
 
@@ -42,7 +42,7 @@ public class ReviewCycleDueWarningDuration extends Record {
     public Date subtractCycleDuration(Date now, ReviewCycleDueWarningDuration durationValues) {
         ZonedDateTime lastDueZoned;
 
-        int calendarField = durationValues.getCalendarField().getCalendarField();
+        int calendarField = durationValues.getCalendarField().getType();
         int calendarFieldCount = durationValues.getCalendarFieldCount();
 
         if (now == null) {
@@ -66,7 +66,7 @@ public class ReviewCycleDueWarningDuration extends Record {
     public static Date addCycleDuration(Date now, ReviewCycleDueWarningDuration durationValues) {
         ZonedDateTime lastDueZoned;
 
-        int calendarField = durationValues.getCalendarField().getCalendarField();
+        int calendarField = durationValues.getCalendarField().getType();
         int calendarFieldCount = durationValues.getCalendarFieldCount();
 
         if (now == null) {
@@ -114,7 +114,7 @@ public class ReviewCycleDueWarningDuration extends Record {
         return compound;
     }
 
-    // Used for calculating banner warning date range
+    // Used for calculating the banner warning date range
     public static Predicate getBannerDueWarningPredicate(Date now, ReviewCycleDueWarningDuration dueWarningDuration) {
         Date dueSoon = ReviewCycleDueWarningDuration.addCycleDuration(now, dueWarningDuration);
         return PredicateParser.Static.parse(

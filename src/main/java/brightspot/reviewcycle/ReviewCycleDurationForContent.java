@@ -8,8 +8,8 @@ import java.util.Date;
 import com.psddev.dari.db.Record;
 
 /**
- * This file is associated with the cycle duration for a content type. It utillizes CalendarField enum which can be a
- * specific amount of days, months, or years.
+ * This file is associated with the cycle duration for a content type. It utilizes the @see {@link CalendarField} enum
+ * which can be a specific amount of days, months, or years.
  */
 public class ReviewCycleDurationForContent extends Record {
 
@@ -42,9 +42,9 @@ public class ReviewCycleDurationForContent extends Record {
                     ZoneId.of("UTC"));
         }
 
-        if (this.getCalendarField().getCalendarField() == Calendar.DAY_OF_MONTH) {
+        if (this.getCalendarField().getType() == Calendar.DAY_OF_MONTH) {
             lastDueZoned = lastDueZoned.minusDays(calendarFieldCount);
-        } else if (this.getCalendarField().getCalendarField() == Calendar.WEEK_OF_MONTH) {
+        } else if (this.getCalendarField().getType() == Calendar.WEEK_OF_MONTH) {
             lastDueZoned = lastDueZoned.minusWeeks(calendarFieldCount);
         } else {
             lastDueZoned = lastDueZoned.minusMonths(calendarFieldCount);
@@ -62,9 +62,9 @@ public class ReviewCycleDurationForContent extends Record {
                     ZoneId.of("UTC"));
         }
 
-        if (this.getCalendarField().getCalendarField() == Calendar.DAY_OF_MONTH) {
+        if (this.getCalendarField().getType() == Calendar.DAY_OF_MONTH) {
             lastDueZoned = lastDueZoned.plusDays(calendarFieldCount);
-        } else if (this.getCalendarField().getCalendarField() == Calendar.WEEK_OF_MONTH) {
+        } else if (this.getCalendarField().getType() == Calendar.WEEK_OF_MONTH) {
             lastDueZoned = lastDueZoned.plusWeeks(calendarFieldCount);
         } else {
             lastDueZoned = lastDueZoned.plusMonths(calendarFieldCount);
