@@ -16,7 +16,6 @@ import com.psddev.cms.db.ToolUser;
 import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
-import com.psddev.cms.ui.form.DynamicPlaceholderMethod;
 import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Grouping;
 import com.psddev.dari.db.Modification;
@@ -56,8 +55,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Due Warning Duration")
-    @Note("Durations should be from longest to shortest")
-    @DynamicPlaceholderMethod("getDefaultDueWarningDuration")
+    @Note("The freshness banner will appear on content after the first notification is sent out")
     private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
 
     @Tab(REVIEW_CYCLE_TAB)

@@ -2,7 +2,11 @@ package brightspot.reviewcycle;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +27,8 @@ import com.psddev.dari.html.Nodes;
 import com.psddev.dari.web.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration.addCycleDuration;
 
 /**
  * ReviewCycleDueBanner is associated with the banner shown at the top of the content type ready for review.
@@ -62,10 +68,19 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             .orElse(null);
 
         // First, get the due warning duration from content type, then fall back to default due warning duration if null.
-        ReviewCycleDueWarningDuration defaultDueWarningDuration = WebRequest.getCurrent()
+        List<ReviewCycleDueWarningDuration> dueWarningDurations = WebRequest.getCurrent()
                 .as(ToolRequest.class)
                 .getCurrentSite().as(ReviewCycleSiteSettings.class)
-                .getReviewCycleDueWarningDurations().get(0);
+                .getReviewCycleDueWarningDurations();
+
+        Map<ReviewCycleDueWarningDuration, Date> dueWarningDurationDateMap = new HashMap<>();
+
+        for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
+            dueWarningDurationDateMap.put(dueWarningDuration, addCycleDuration(Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS)), dueWarningDuration));
+        }
+
+        // Furthest date
+        ReviewCycleDueWarningDuration furthestDueWarningDuration = Collections.max(dueWarningDurationDateMap.entrySet(), Map.Entry.comparingByValue()).getKey();
 
         if (map != null) {
             Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
@@ -74,7 +89,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
                 this.writeBanner(reviewCycleContent, page, true);
             } else if (PredicateParser.Static.evaluate(
                 item,
-                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, defaultDueWarningDuration))) {
+                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, furthestDueWarningDuration))) {
                 this.writeBanner(reviewCycleContent, page, false);
             }
         }
