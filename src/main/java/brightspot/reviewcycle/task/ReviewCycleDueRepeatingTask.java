@@ -52,7 +52,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     value,
                     siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getContentTypeMaps());
 
-            List<ReviewCycleDueWarningDuration> dueWarnings = Query.from(ReviewCycleDueWarningDuration.class).selectAll();
+            List<ReviewCycleDueWarningDuration> dueWarnings = SiteSettings.get(
+                    value,
+                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getReviewCycleDueWarningDurations());
 
             LOGGER.info("ContentMaps size: " + contentMaps.size());
 

@@ -29,7 +29,7 @@ public class DismissReviewCycleServlet extends AbstractWebPage {
     public static final String RECORD_ID_PARAMETER = "recordid";
 
     @Override
-    protected void onGet() throws Exception {
+    protected void onGet() {
 
         if (!WebRequest.isAvailable()) {
             throw new RuntimeException("Web Request is unavailable.");

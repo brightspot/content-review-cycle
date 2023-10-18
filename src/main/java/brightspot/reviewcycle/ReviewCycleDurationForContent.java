@@ -5,6 +5,8 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.google.common.collect.ImmutableMap;
+import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.dari.db.Record;
 
@@ -77,6 +79,10 @@ public class ReviewCycleDurationForContent extends Record {
     @Override
     public String getLabel() {
         String defaultText = "Every " + getCalendarFieldCount() + " " + getCalendarField().toString();
-        return ToolLocalization.text(ReviewCycleDurationForContent.class, "label.duration", defaultText);
+        return ToolLocalization.text(
+                new LocalizationContext(ReviewCycleDurationForContent.class,
+                        ImmutableMap.of("calendarFieldCount", getCalendarFieldCount(), "calendarFieldName", getCalendarField().toString())),
+                "label.duration",
+                defaultText);
     }
 }

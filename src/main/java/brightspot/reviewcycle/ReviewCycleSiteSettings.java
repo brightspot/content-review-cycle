@@ -16,6 +16,8 @@ import com.psddev.cms.db.ToolUser;
 import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
+import com.psddev.cms.ui.form.DynamicPlaceholderMethod;
+import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Grouping;
 import com.psddev.dari.db.Modification;
 import com.psddev.dari.db.ObjectType;
@@ -56,7 +58,9 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Due Warning Duration")
-    private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
+    @Note("Durations should be from longest to shortest")
+    @DynamicPlaceholderMethod("getDefaultDueWarningDuration")
+    private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
@@ -71,12 +75,15 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
         this.reviewCycleDurationForContent = reviewCycleDurationForContent;
     }
 
-    public ReviewCycleDueWarningDuration getReviewCycleDueWarningDuration() {
-        return reviewCycleDueWarningDuration;
+    public List<ReviewCycleDueWarningDuration> getReviewCycleDueWarningDurations() {
+        if (reviewCycleDueWarningDurations == null) {
+            reviewCycleDueWarningDurations = new ArrayList<>();
+        }
+        return reviewCycleDueWarningDurations;
     }
 
-    public void setReviewCycleDueWarningDuration(ReviewCycleDueWarningDuration reviewCycleDueWarningDuration) {
-        this.reviewCycleDueWarningDuration = reviewCycleDueWarningDuration;
+    public void setReviewCycleDueWarningDurations(List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations) {
+        this.reviewCycleDueWarningDurations = reviewCycleDueWarningDurations;
     }
 
     public List<ReviewCycleContentTypeMap> getContentTypeMaps() {

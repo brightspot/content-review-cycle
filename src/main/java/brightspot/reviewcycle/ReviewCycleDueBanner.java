@@ -65,7 +65,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
         ReviewCycleDueWarningDuration defaultDueWarningDuration = WebRequest.getCurrent()
                 .as(ToolRequest.class)
                 .getCurrentSite().as(ReviewCycleSiteSettings.class)
-                .getReviewCycleDueWarningDuration();
+                .getReviewCycleDueWarningDurations().get(0);
 
         if (map != null) {
             Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));

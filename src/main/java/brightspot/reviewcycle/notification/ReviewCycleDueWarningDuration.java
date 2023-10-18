@@ -9,7 +9,6 @@ import java.util.List;
 
 import brightspot.reviewcycle.CalendarField;
 import brightspot.reviewcycle.ReviewCycleContentModification;
-import brightspot.reviewcycle.ReviewCycleDurationForContent;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
@@ -131,7 +130,7 @@ public class ReviewCycleDueWarningDuration extends Record {
     public String getLabel() {
         String defaultText = "Every " + getCalendarFieldCount() + " " + getCalendarField().toString();
         return ToolLocalization.text(
-                new LocalizationContext(ReviewCycleDurationForContent.class,
+                new LocalizationContext(ReviewCycleDueWarningDuration.class,
                         ImmutableMap.of("calendarFieldCount", getCalendarFieldCount(), "calendarFieldName", getCalendarField().toString())),
                 "label.duration",
                 defaultText);
