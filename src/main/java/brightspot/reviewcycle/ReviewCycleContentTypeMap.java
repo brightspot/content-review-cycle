@@ -60,7 +60,7 @@ public class ReviewCycleContentTypeMap extends Record {
     }
 
     private ReviewCycleDurationForContent getDefaultCycleDurationFallback() {
-        return WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite().as(ReviewCycleSiteSettings.class).getReviewCycleDurationForContent();
+        return WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite().as(ReviewCycleSiteSettings.class).getSettings().getReviewCycleDurationForContent();
     }
 
     @Override

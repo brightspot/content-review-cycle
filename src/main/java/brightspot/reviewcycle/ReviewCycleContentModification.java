@@ -199,7 +199,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             if (site != null) {
                 List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
                     site,
-                    s -> s.as(ReviewCycleSiteSettings.class).getContentTypeMaps());
+                    s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
                 return mapsList.stream()
                     .filter(map -> map.getContentType().equals(originalObjectType))
                     .findFirst().orElse(null);

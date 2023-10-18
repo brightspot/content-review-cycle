@@ -71,7 +71,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
         List<ReviewCycleDueWarningDuration> dueWarningDurations = WebRequest.getCurrent()
                 .as(ToolRequest.class)
                 .getCurrentSite().as(ReviewCycleSiteSettings.class)
-                .getReviewCycleDueWarningDurations();
+                .getSettings().getReviewCycleDueWarningDurations();
 
         Map<ReviewCycleDueWarningDuration, Date> dueWarningDurationDateMap = new HashMap<>();
 
