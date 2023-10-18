@@ -48,13 +48,11 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleSiteSettings.class);
 
-    @Required
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Default Cycle Duration")
     private ReviewCycleDurationForContent reviewCycleDurationForContent;
 
-    @Required
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Due Warning Duration")
