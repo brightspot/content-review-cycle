@@ -352,12 +352,12 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
             // Due soon
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
-                ImmutableMap.of("days", days)), "label.dueSoon");
+                ImmutableMap.of("days", days)), "label.dueSoon", "Due soon");
         } else {
             // past due
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
-                ImmutableMap.of("days", Math.abs(days))), "label.pastDue");
+                ImmutableMap.of("days", Math.abs(days))), "label.pastDue", "Past due");
         }
     }
 
