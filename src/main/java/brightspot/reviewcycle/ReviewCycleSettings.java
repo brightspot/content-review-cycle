@@ -27,17 +27,20 @@ public class ReviewCycleSettings extends Record {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleSiteSettings.class);
 
+    @Required
     @ToolUi.Tab(REVIEW_CYCLE_TAB)
     @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Default Cycle Duration")
     private ReviewCycleDurationForContent reviewCycleDurationForContent;
 
+    @Required
     @ToolUi.Tab(REVIEW_CYCLE_TAB)
     @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Due Warning Duration")
     @Note("The freshness banner will appear on content after the first notification is sent out")
     private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
 
+    @Required
     @ToolUi.Tab(REVIEW_CYCLE_TAB)
     @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
