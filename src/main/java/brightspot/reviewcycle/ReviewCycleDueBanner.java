@@ -67,7 +67,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             .map(ReviewCycleContentModification::getReviewCycleMap)
             .orElse(null);
 
-        // First, get the due warning duration from content type, then fall back to default due warning duration if null.
+        // Get all due warning durations
         List<ReviewCycleDueWarningDuration> dueWarningDurations = WebRequest.getCurrent()
                 .as(ToolRequest.class)
                 .getCurrentSite().as(ReviewCycleSiteSettings.class)
@@ -75,11 +75,12 @@ public class ReviewCycleDueBanner implements EditTopHtml {
 
         Map<ReviewCycleDueWarningDuration, Date> dueWarningDurationDateMap = new HashMap<>();
 
+        // Add the due warning durations and their cycle durations to a hashmap
         for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
             dueWarningDurationDateMap.put(dueWarningDuration, addCycleDuration(Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS)), dueWarningDuration));
         }
 
-        // Furthest date
+        // Retrieve the due warning duration with the furthest cycle duration
         ReviewCycleDueWarningDuration furthestDueWarningDuration = Collections.max(dueWarningDurationDateMap.entrySet(), Map.Entry.comparingByValue()).getKey();
 
         if (map != null) {
