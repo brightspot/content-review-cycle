@@ -43,6 +43,7 @@ import com.psddev.dari.web.UrlBuilder;
 import com.psddev.dari.web.WebRequest;
 import org.joda.time.DateTime;
 
+/** The ReviewActivityWidget shows the content types due soon or past due. It can be filtered by any content type. */
 public class ReviewActivityWidget extends DefaultDashboardWidget {
 
     private static final int[] LIMITS = { 10, 20, 50 };

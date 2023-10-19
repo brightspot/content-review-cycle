@@ -9,6 +9,7 @@ import com.psddev.dari.notification.Notification;
 import com.psddev.dari.notification.Subscriber;
 import com.psddev.watch.WatcherObjectModification;
 
+/** Used in @see {@link brightspot.reviewcycle.task.ReviewCycleDueRepeatingTask} for publishing notifications */
 public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubscription, ReviewCycleNotificationBundle> {
 
     private ReviewCycleNotificationBundle bundle;

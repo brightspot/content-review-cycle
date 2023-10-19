@@ -16,6 +16,12 @@ import com.psddev.dari.db.StringException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**This class will set the
+ * default cycle duration.This class is also where the list of content type maps are
+ * chosen where each contains the content type to be configured along with its cycle duration. Additionally, a list of
+ * due warning durations can be populated, where the review cycle due banner will appear in the content type after the
+ * first notification is sent.
+ */
 @Recordable.Embedded
 public class ReviewCycleSettings extends Record {
 
