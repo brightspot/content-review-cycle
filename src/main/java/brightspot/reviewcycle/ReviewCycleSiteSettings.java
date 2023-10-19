@@ -4,6 +4,7 @@ import com.psddev.cms.db.Site;
 import com.psddev.cms.db.ToolUi;
 import com.psddev.cms.db.ToolUser;
 import com.psddev.cms.ui.ToolRequest;
+import com.psddev.cms.ui.form.Placeholder;
 import com.psddev.dari.db.Modification;
 import com.psddev.dari.db.Query;
 import com.psddev.dari.db.State;
@@ -20,6 +21,8 @@ import org.slf4j.LoggerFactory;
 @ToolUi.FieldInternalNamePrefix(ReviewCycleSiteSettings.FIELD_PREFIX)
 public class ReviewCycleSiteSettings extends Modification<Site> {
 
+    public static final String TAB = "CMS";
+    public static final String CLUSTER = "Review Cycle Settings";
     public static final String FIELD_PREFIX = "reviewCycleSettings.";
 
     public static final String CONTENT_TYPE_MAPS_FIELD = "contentTypeMaps";
@@ -29,6 +32,9 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
     private transient boolean shouldReindex;
 
+    @ToolUi.Tab(TAB)
+    @ToolUi.Cluster(CLUSTER)
+    @Placeholder("Disabled")
     private ReviewCycleSettings settings;
 
     public ReviewCycleSettings getSettings() {
