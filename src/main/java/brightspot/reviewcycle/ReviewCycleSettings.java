@@ -31,7 +31,7 @@ public class ReviewCycleSettings extends Record {
     private static final String REVIEW_CYCLE_CLUSTER = "Review Cycle";
     private static final String REVIEW_CYCLE_TAB = "CMS";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleSiteSettings.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleSettings.class);
 
     @Required
     @ToolUi.Tab(REVIEW_CYCLE_TAB)
