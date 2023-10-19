@@ -13,8 +13,6 @@ import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
 import com.psddev.dari.db.StringException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**This class will set the
  * default cycle duration.This class is also where the list of content type maps are
