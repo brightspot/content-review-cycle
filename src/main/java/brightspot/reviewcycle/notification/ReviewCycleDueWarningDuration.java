@@ -128,7 +128,7 @@ public class ReviewCycleDueWarningDuration extends Record {
 
     @Override
     public String getLabel() {
-        String defaultText = "Every " + getCalendarFieldCount() + " " + getCalendarField().toString();
+        String defaultText = getCalendarFieldCount() + " " + getCalendarField().toString();
         return ToolLocalization.text(
                 new LocalizationContext(ReviewCycleDueWarningDuration.class,
                         ImmutableMap.of("calendarFieldCount", getCalendarFieldCount(), "calendarFieldName", getCalendarField().toString())),

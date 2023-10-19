@@ -78,7 +78,7 @@ public class ReviewCycleContentTypeMap extends Record {
 
         int calenderFieldCount = getCycleDuration().getCalendarFieldCount();
 
-        String defaultText = this.getContentType().getDisplayName() + " - " + "Every " + calenderFieldCount + " "
+        String defaultText = this.getContentType().getDisplayName() + " - " + calenderFieldCount + " "
                 + timePeriod;
 
         return ToolLocalization.text(
