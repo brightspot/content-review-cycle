@@ -177,7 +177,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         } else if (!result.hasPages()) {
             page.writeStart("div", "class", "message message-info");
             page.writeStart("p");
-            page.writeHtml(ToolLocalization.text(ReviewActivityWidget.class, "message.noActivity"));
+            page.writeHtml(ToolLocalization.text(ReviewActivityWidget.class, "message.noActivity", "No review cycle activity!"));
             page.writeEnd();
             page.writeEnd();
 
