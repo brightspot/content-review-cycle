@@ -28,27 +28,19 @@ public class ReviewCycleSettings extends Record {
     public static final String FIELD_PREFIX = "reviewCycleSettings.";
     public static final String CONTENT_TYPE_MAPS_FIELD = "contentTypeMaps";
     public static final String CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME = FIELD_PREFIX + CONTENT_TYPE_MAPS_FIELD;
-    private static final String REVIEW_CYCLE_CLUSTER = "Review Cycle";
-    private static final String REVIEW_CYCLE_TAB = "CMS";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleSettings.class);
 
     @Required
-    @ToolUi.Tab(REVIEW_CYCLE_TAB)
-    @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Default Cycle Duration")
     private ReviewCycleDurationForContent reviewCycleDurationForContent;
 
     @Required
-    @ToolUi.Tab(REVIEW_CYCLE_TAB)
-    @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Due Warning Duration")
-    @Note("The freshness banner will appear on content after the first notification is sent out")
+    @Note("The freshness banner will appear on content after the first notification is sent out.")
     private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
 
     @Required
-    @ToolUi.Tab(REVIEW_CYCLE_TAB)
-    @ToolUi.Cluster(REVIEW_CYCLE_CLUSTER)
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
 
