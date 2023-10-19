@@ -9,6 +9,7 @@ import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import com.psddev.cms.db.Site;
 import com.psddev.cms.db.ToolUi;
 import com.psddev.cms.ui.form.Note;
+import com.psddev.cms.ui.form.Placeholder;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
@@ -25,6 +26,8 @@ import org.slf4j.LoggerFactory;
 @Recordable.Embedded
 public class ReviewCycleSettings extends Record {
 
+    public static final String TAB = "CMS";
+    public static final String CLUSTER = "Review Cycle Settings";
     public static final String FIELD_PREFIX = "reviewCycleSettings.";
     public static final String CONTENT_TYPE_MAPS_FIELD = "contentTypeMaps";
     public static final String CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME = FIELD_PREFIX + CONTENT_TYPE_MAPS_FIELD;
@@ -33,10 +36,16 @@ public class ReviewCycleSettings extends Record {
 
     @Required
     @DisplayName("Default Cycle Duration")
+    @ToolUi.Tab(TAB)
+    @ToolUi.Cluster(CLUSTER)
+    @Placeholder("Disabled")
     private ReviewCycleDurationForContent reviewCycleDurationForContent;
 
     @Required
     @DisplayName("Due Warning Duration")
+    @ToolUi.Tab(TAB)
+    @ToolUi.Cluster(CLUSTER)
+    @Placeholder("Disabled")
     @Note("The freshness banner will appear on content after the first notification is sent out.")
     private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
 
