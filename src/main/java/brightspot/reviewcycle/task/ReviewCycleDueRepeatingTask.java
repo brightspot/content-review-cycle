@@ -105,7 +105,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                         ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
                                 + " != missing and "
                                 + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                                + " <= ?", now.getTime());
+                                + " < ?", now.getTime());
 
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
                         PredicateParser.OR_OPERATOR,
