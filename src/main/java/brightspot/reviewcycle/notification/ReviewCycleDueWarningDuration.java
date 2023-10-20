@@ -97,7 +97,7 @@ public class ReviewCycleDueWarningDuration extends Record {
         Predicate currentPredicate;
 
         for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
-            currentInstant = dueWarningDuration.addCycleDuration(now, dueWarningDuration).toInstant();
+            currentInstant = addCycleDuration(now, dueWarningDuration).toInstant();
             currentPredicate = PredicateParser.Static.parse(
                     ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
                             + " != missing && "
