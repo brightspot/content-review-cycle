@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import static brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration.addCycleDuration;
 
 /**
- * ReviewCycleDueBanner is associated with the banner shown at the top of the content type ready for review.
+ * ReviewCycleDueBanner is associated with the banner shown at the top of the content type edit page ready for review.
  */
 public class ReviewCycleDueBanner implements EditTopHtml {
 

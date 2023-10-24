@@ -61,7 +61,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
     @Override
     public void writeHtml(ToolPageContext page, Dashboard dashboard) throws IOException {
 
-        /** Check types configured in @see {@link brightspot.reviewcycle.ReviewCycleSiteSettings} and at the content level */
+        // Check types configured in sites & settings and at the content level */
         Site site = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite();
 
         List<ObjectType> configuredObjectTypes;
@@ -355,7 +355,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                 ReviewActivityWidget.class,
                 ImmutableMap.of("days", days)), "label.dueSoon", "Due soon");
         } else {
-            // past due
+            // Past due
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
                 ImmutableMap.of("days", Math.abs(days))), "label.pastDue", "Past due");

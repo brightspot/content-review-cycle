@@ -14,9 +14,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ReviewCycleSiteSettings is a modification of site that is shown in the CMS tab under Review Cycle.
- * See {@link ReviewCycleSettings wrapper class } so that the site settings configurations are not directly
+ * See {@link ReviewCycleSettings wrapper class }, created so that the site settings configurations are not directly
  * on the site.
- * This can be overriden by the @see {@link ReviewCycleContentModification}.
  */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleSiteSettings.FIELD_PREFIX)
 public class ReviewCycleSiteSettings extends Modification<Site> {

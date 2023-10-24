@@ -15,7 +15,7 @@ import com.psddev.dari.web.WebRequest;
 
 /**
  * The ReviewCycleContentMap is associated with a specific content type and its cycle duration. Each
- * ReviewCycleContentTypeMap will contain a @see {@link #getCycleDuration()} that is either filled in or inherited
+ * ReviewCycleContentTypeMap will contain a {@link #getCycleDuration()} that is either filled in or inherited
  * from the default values.
  */
 @Recordable.Embedded

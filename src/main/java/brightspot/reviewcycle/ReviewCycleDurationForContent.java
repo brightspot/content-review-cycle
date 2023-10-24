@@ -11,7 +11,7 @@ import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.dari.db.Record;
 
 /**
- * This file is associated with the cycle duration for a content type. It utilizes the @see {@link CalendarField} enum
+ * This file is associated with the cycle duration of a content type. It utilizes the {@link CalendarField} enum
  * which can be a specific amount of days, months, or years.
  */
 public class ReviewCycleDurationForContent extends Record {

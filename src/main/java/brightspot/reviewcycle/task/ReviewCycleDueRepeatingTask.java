@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This ReviewCycleDueRepeatingTask publishes notifications of content that is due or has a warning, both overriden
- * and non-overriden content. This task is set to repeat once per day.
+ * and non-overriden content.
  * The method {@link #calculateRunTime(DateTime)} sets how often this task should be repeated.
  */
 public class ReviewCycleDueRepeatingTask extends RepeatingTask {
@@ -174,7 +174,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
-        return everyDay(currentTime);
+        return everyMinute(currentTime);
     }
 
 }

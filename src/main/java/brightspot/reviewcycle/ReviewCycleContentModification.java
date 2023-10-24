@@ -188,7 +188,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             return null;
         }
 
-        /** Check for override then check @see {@link ReviewCycleSiteSettings} */
+        // Check for override
         if (this.getReviewCycleDuration() != null) {
             return new ReviewCycleContentTypeMap(
                 originalObjectType,
