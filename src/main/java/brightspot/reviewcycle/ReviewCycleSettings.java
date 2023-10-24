@@ -40,6 +40,10 @@ public class ReviewCycleSettings extends Record {
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
 
+    @Required
+    @ToolUi.Cluster("Notification Settings")
+    private NotificationInterval notificationInterval;
+
     @ToolUi.Hidden
     private Site owner;
 
@@ -71,6 +75,14 @@ public class ReviewCycleSettings extends Record {
 
     public void setContentTypeMaps(List<ReviewCycleContentTypeMap> contentTypeMaps) {
         this.contentTypeMaps = contentTypeMaps;
+    }
+
+    public NotificationInterval getNotificationInterval() {
+        return notificationInterval;
+    }
+
+    public void setNotificationInterval(NotificationInterval notificationInterval) {
+        this.notificationInterval = notificationInterval;
     }
 
     public Site getOwner() {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import brightspot.reviewcycle.NotificationInterval;
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import brightspot.reviewcycle.ReviewCycleContentTypeMap;
 import brightspot.reviewcycle.ReviewCycleDurationForContent;
@@ -174,7 +175,28 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
-        return everyMinute(currentTime);
+
+        List<Site> sites = Query.from(Site.class).selectAll();
+
+        // Default retrieves the interval of the first site. You can set this to be a specific site.
+        NotificationInterval interval = SiteSettings.get(
+                sites.get(0),
+                siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationInterval());
+
+        if (interval == null) {
+            return everyMinute(currentTime);
+        }
+
+        String intervalValue = interval.getInterval();
+
+        switch (intervalValue) {
+            case "Every day":
+                return everyDay(currentTime);
+            case "Every hour":
+                return everyHour(currentTime);
+            default:
+                return everyMinute(currentTime);
+        }
     }
 
 }
