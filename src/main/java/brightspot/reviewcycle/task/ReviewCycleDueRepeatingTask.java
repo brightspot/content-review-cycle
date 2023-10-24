@@ -178,7 +178,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         List<Site> sites = Query.from(Site.class).selectAll();
 
-        // Default retrieves the interval of the first site. You can set this to be a specific site.
+        // Default retrieves the interval of the first site. Can be set to be a specific site.
         NotificationInterval interval = SiteSettings.get(
                 sites.get(0),
                 siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationInterval());
