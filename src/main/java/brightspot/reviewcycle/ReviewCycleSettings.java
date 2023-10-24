@@ -42,6 +42,7 @@ public class ReviewCycleSettings extends Record {
 
     @Required
     @ToolUi.Cluster("Notification Settings")
+    @DisplayName("Notification Interval")
     private NotificationInterval notificationInterval;
 
     @ToolUi.Hidden
