@@ -1,6 +1,7 @@
 package brightspot.reviewcycle.notification;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import brightspot.reviewcycle.ReviewCycleUtils;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +32,15 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
 
             String prefix = "REVIEW DUE: The following content in ";
             String siteName = payload.getOwnerName();
-            String body = " is due for content review on ";
+            String body;
+
+            // Check payload due date
+            if (payload.getDueDate().before(new Date())) {
+                body = " was due for content review on";
+            } else {
+                body = "is due for content review on";
+            }
+
             String dateString = "(" + dateFormat.format(payload.getDueDate()) + ")";
             String formatting = ": ";
             String contentName = payload.getContentLabel();
