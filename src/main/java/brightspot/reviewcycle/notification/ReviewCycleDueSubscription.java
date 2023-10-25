@@ -38,7 +38,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
             if (payload.getDueDate().before(new Date())) {
                 body = " was due for content review on";
             } else {
-                body = "is due for content review on";
+                body = " is due for content review on";
             }
 
             String dateString = "(" + dateFormat.format(payload.getDueDate()) + ")";
