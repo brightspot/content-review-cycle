@@ -2,7 +2,7 @@ package brightspot.reviewcycle.notification;
 
 import java.text.SimpleDateFormat;
 
-import brightspot.reviewcycle.Utils;
+import brightspot.reviewcycle.ReviewCycleUtils;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.notification.ToolSubscription;
 import com.psddev.cms.notification.ToolUserOnlySubscription;
@@ -50,7 +50,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
                     "label.reviewDue",
                     defaultText);
 
-            String redirectUrl = Utils.fullyQualifiedCmsUrlBuilder("/content/edit.jsp")
+            String redirectUrl = ReviewCycleUtils.fullyQualifiedCmsUrlBuilder("/content/edit.jsp")
                 .addParameter("id", payload.getContentId())
                 .build();
 

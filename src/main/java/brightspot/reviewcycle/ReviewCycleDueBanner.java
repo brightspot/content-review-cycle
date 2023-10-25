@@ -122,10 +122,8 @@ public class ReviewCycleDueBanner implements EditTopHtml {
 
         try {
             page.write(bannerMessage);
-            page.writeStart("br");
-            page.writeStart("br");
         } catch (IOException e) {
-            LOGGER.warn("Error while writing embargo banner!", e);
+            LOGGER.warn("Error while writing review cycle banner!", e);
         }
     }
 

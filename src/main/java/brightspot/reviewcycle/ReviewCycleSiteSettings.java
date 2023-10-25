@@ -67,7 +67,7 @@ public class ReviewCycleSiteSettings extends Modification<Site> {
 
         // check if changed
         if (databaseState != null
-                && Utils.computeDelta(databaseSettings, this).get(CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME)
+                && ReviewCycleUtils.computeDelta(databaseSettings, this).get(CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME)
                 != null) {
             String info = "CONTENT TYPE MAPS FIELD HAS CHANGED. TRIGGERING REINDEX";
 

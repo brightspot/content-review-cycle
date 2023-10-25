@@ -1,9 +1,12 @@
 package brightspot.reviewcycle;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Draft;
@@ -50,6 +53,8 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     public static final String NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME =
         FIELD_PATH + FIELD_PREFIX + NEXT_REVIEW_DATE_INDEX_FIELD;
 
+    private static final DateFormat FORMAT = new SimpleDateFormat("EEE, MMM dd, yyyy");
+
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @Note("Last Revision Date")
@@ -59,7 +64,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @DynamicNoteMethod("getNextReviewDateIndex")
+    @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
     private Date nextReviewDate;
 
@@ -107,8 +112,19 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .orElse(null);
     }
 
+    public String getNextReviewDateNote() {
+        Date utcDue = getNextReviewDateIndex();
+
+        if (utcDue != null) {
+            FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return FORMAT.format(utcDue);
+        } else {
+            return null;
+        }
+    }
+
     private Date calculateNextReviewDate() {
-        HasReviewCycle hasReviewCycle = Utils.resolve(getOriginalObject());
+        HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
         ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
             .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
             .map(ReviewCycleContentModification::getReviewCycleMap)
@@ -145,7 +161,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         // If firstPublish or Revision publish, set last date
 
         // First Publish
-        if (Utils.isFirstPublish(originalObject)) {
+        if (ReviewCycleUtils.isFirstPublish(originalObject)) {
             originalObject.as(ReviewCycleContentModification.class)
                 .setReviewDate(now);
         }

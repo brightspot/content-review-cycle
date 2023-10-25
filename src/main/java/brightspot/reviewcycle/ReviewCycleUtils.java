@@ -19,8 +19,8 @@ import com.psddev.dari.web.UrlBuilder;
 import com.psddev.dari.web.WebRequest;
 import org.apache.commons.lang3.StringUtils;
 
-public final class Utils {
-    private Utils() {
+public final class ReviewCycleUtils {
+    private ReviewCycleUtils() {
 
     }
 
