@@ -2,11 +2,7 @@ package brightspot.reviewcycle;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,8 +23,6 @@ import com.psddev.dari.html.Nodes;
 import com.psddev.dari.web.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration.addCycleDuration;
 
 /**
  * ReviewCycleDueBanner is associated with the banner shown at the top of the content type edit page ready for review.

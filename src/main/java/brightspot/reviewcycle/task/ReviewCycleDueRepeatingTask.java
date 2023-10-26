@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import brightspot.reviewcycle.NotificationInterval;
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import brightspot.reviewcycle.ReviewCycleContentTypeMap;
 import brightspot.reviewcycle.ReviewCycleDurationForContent;
