@@ -32,12 +32,13 @@ public class ReviewCycleSettings extends Record {
     private ReviewCycleDurationForContent reviewCycleDurationForContent;
 
     @Required
-    @DisplayName("Due Warning Duration")
+    @DisplayName("Banner Warning Duration")
     @Note("The freshness banner will appear on content when the review cycle due date is within this amount of time.")
     private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
 
     @Required
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
+    @DisplayName("Content Types")
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
 
     @Required
