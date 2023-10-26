@@ -67,21 +67,11 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             .map(ReviewCycleContentModification::getReviewCycleMap)
             .orElse(null);
 
-        // Get all due warning durations
-        List<ReviewCycleDueWarningDuration> dueWarningDurations = WebRequest.getCurrent()
+        // Get due warning duration
+        ReviewCycleDueWarningDuration dueWarningDuration = WebRequest.getCurrent()
                 .as(ToolRequest.class)
                 .getCurrentSite().as(ReviewCycleSiteSettings.class)
-                .getSettings().getReviewCycleDueWarningDurations();
-
-        Map<ReviewCycleDueWarningDuration, Date> dueWarningDurationDateMap = new HashMap<>();
-
-        // Add the due warning durations and their cycle durations to a hashmap
-        for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
-            dueWarningDurationDateMap.put(dueWarningDuration, addCycleDuration(Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS)), dueWarningDuration));
-        }
-
-        // Retrieve the due warning duration with the furthest cycle duration
-        ReviewCycleDueWarningDuration furthestDueWarningDuration = Collections.max(dueWarningDurationDateMap.entrySet(), Map.Entry.comparingByValue()).getKey();
+                .getSettings().getReviewCycleDueWarningDuration();
 
         if (map != null) {
             Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
@@ -90,7 +80,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
                 this.writeBanner(reviewCycleContent, page, true);
             } else if (PredicateParser.Static.evaluate(
                 item,
-                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, furthestDueWarningDuration))) {
+                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, dueWarningDuration))) {
                 this.writeBanner(reviewCycleContent, page, false);
             }
         }

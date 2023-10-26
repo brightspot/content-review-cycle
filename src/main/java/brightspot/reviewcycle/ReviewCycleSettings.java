@@ -33,8 +33,8 @@ public class ReviewCycleSettings extends Record {
 
     @Required
     @DisplayName("Due Warning Duration")
-    @Note("The freshness banner will appear on content after the first notification is sent out.")
-    private List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations;
+    @Note("The freshness banner will appear on content when the review cycle due date is within this amount of time.")
+    private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
 
     @Required
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
@@ -42,8 +42,9 @@ public class ReviewCycleSettings extends Record {
 
     @Required
     @ToolUi.Cluster("Notification Settings")
-    @DisplayName("Notification Interval")
-    private NotificationInterval notificationInterval;
+    @DisplayName("Notification Warning Times")
+    @Note("Notifications will be sent out daily to content due in exactly these days, weeks, or months.")
+    private List<ReviewCycleDueWarningDuration> notificationWarningTimes;
 
     @ToolUi.Hidden
     private Site owner;
@@ -56,15 +57,12 @@ public class ReviewCycleSettings extends Record {
         this.reviewCycleDurationForContent = reviewCycleDurationForContent;
     }
 
-    public List<ReviewCycleDueWarningDuration> getReviewCycleDueWarningDurations() {
-        if (reviewCycleDueWarningDurations == null) {
-            reviewCycleDueWarningDurations = new ArrayList<>();
-        }
-        return reviewCycleDueWarningDurations;
+    public ReviewCycleDueWarningDuration getReviewCycleDueWarningDuration() {
+        return reviewCycleDueWarningDuration;
     }
 
-    public void setReviewCycleDueWarningDurations(List<ReviewCycleDueWarningDuration> reviewCycleDueWarningDurations) {
-        this.reviewCycleDueWarningDurations = reviewCycleDueWarningDurations;
+    public void setReviewCycleDueWarningDurations(ReviewCycleDueWarningDuration reviewCycleDueWarningDuration) {
+        this.reviewCycleDueWarningDuration = reviewCycleDueWarningDuration;
     }
 
     public List<ReviewCycleContentTypeMap> getContentTypeMaps() {
@@ -78,12 +76,15 @@ public class ReviewCycleSettings extends Record {
         this.contentTypeMaps = contentTypeMaps;
     }
 
-    public NotificationInterval getNotificationInterval() {
-        return notificationInterval;
+    public List<ReviewCycleDueWarningDuration> getNotificationWarningTimes() {
+        if (notificationWarningTimes == null) {
+            notificationWarningTimes = new ArrayList<>();
+        }
+        return notificationWarningTimes;
     }
 
-    public void setNotificationInterval(NotificationInterval notificationInterval) {
-        this.notificationInterval = notificationInterval;
+    public void setNotificationWarningTimes(List<ReviewCycleDueWarningDuration> notificationWarningTimes) {
+        this.notificationWarningTimes = notificationWarningTimes;
     }
 
     public Site getOwner() {

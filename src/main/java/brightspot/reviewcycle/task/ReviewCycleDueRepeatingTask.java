@@ -54,9 +54,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     value,
                     siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
 
-            List<ReviewCycleDueWarningDuration> dueWarnings = SiteSettings.get(
+            List<ReviewCycleDueWarningDuration> notificationWarningTimes = SiteSettings.get(
                     value,
-                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getReviewCycleDueWarningDurations());
+                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationWarningTimes());
 
             LOGGER.info("ContentMaps size: " + contentMaps.size());
 
@@ -78,7 +78,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
                         PredicateParser.OR_OPERATOR,
                         map.getExpiredPredicate(now),
-                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
+                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
 
                 // Check for content (that is due or has a warning today) that does not have overrides
                 List<Content> contents = Query.from(Content.class)
@@ -112,7 +112,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
                         PredicateParser.OR_OPERATOR,
                         datePredicate,
-                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, dueWarnings));
+                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
 
                 // Search for all content where the override is not missing and the date for this duration is due
                 overridesList.addAll(Query.from(Content.class)
@@ -176,27 +176,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
 
-        List<Site> sites = Query.from(Site.class).selectAll();
-
-        // Default retrieves the interval of the first site. Can be set to be a specific site.
-        NotificationInterval interval = SiteSettings.get(
-                sites.get(0),
-                siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationInterval());
-
-        if (interval == null) {
-            return everyMinute(currentTime);
-        }
-
-        String intervalValue = interval.getInterval();
-
-        switch (intervalValue) {
-            case "Every day":
-                return everyDay(currentTime);
-            case "Every hour":
-                return everyHour(currentTime);
-            default:
-                return everyMinute(currentTime);
-        }
+        // Keeping this at a minute for QA testing purposes
+        return everyMinute(currentTime);
     }
 
 }
