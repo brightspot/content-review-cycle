@@ -70,6 +70,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
+    @DisplayName("Review Cycle Duration for This Content Only")
     @InternalName(REVIEW_CYCLE_DURATION_FIELD)
     @Indexed
     private ReviewCycleDurationForContent reviewCycleDurationForContentOverride;
