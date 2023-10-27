@@ -64,14 +64,14 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
-    @ToolUi.ReadOnly
+    @ToolUi.Hidden
     private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
+    @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(REVIEW_CYCLE_DURATION_FIELD)
     @Indexed
     private ReviewCycleDurationForContent reviewCycleDurationForContentOverride;
