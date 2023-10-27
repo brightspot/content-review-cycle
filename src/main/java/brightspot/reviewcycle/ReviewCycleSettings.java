@@ -44,7 +44,7 @@ public class ReviewCycleSettings extends Record {
     @Required
     @ToolUi.Cluster("Notification Settings")
     @DisplayName("Notification Warning Times")
-    @Note("Notifications will be sent out daily to content due in exactly these days, weeks, or months.")
+    @Note("Notifications will be sent out daily to content past due and due in specific days, weeks, or months.")
     private List<ReviewCycleDueWarningDuration> notificationWarningTimes;
 
     @ToolUi.Hidden
