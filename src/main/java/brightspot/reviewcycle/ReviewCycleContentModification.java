@@ -66,6 +66,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
+    @ToolUi.ReadOnly
     private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
