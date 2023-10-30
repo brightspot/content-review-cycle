@@ -72,6 +72,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
+    @DynamicNoteMethod("Setting this override will calculate the next review date from the last cycle duration date, therefore it is recommended you start or cancel the review before modifying it. ")
     @InternalName(REVIEW_CYCLE_DURATION_FIELD)
     @Indexed
     private ReviewCycleDurationForContent reviewCycleDurationForContentOverride;
@@ -126,6 +127,9 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     }
 
     private Date calculateNextReviewDate() {
+
+        ReviewCycleDurationForContent reviewCycleDurationForContent = getReviewCycleDuration();
+
         HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
         ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
             .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
