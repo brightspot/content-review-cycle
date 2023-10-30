@@ -24,6 +24,8 @@ import com.psddev.dari.db.Record;
 public class ReviewCycleDueWarningDuration extends Record {
 
     private CalendarField calendarField;
+
+    @Minimum(1)
     private int calendarFieldCount;
 
     public ReviewCycleDueWarningDuration() {
