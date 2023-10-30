@@ -77,13 +77,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Indexed
     private ReviewCycleDurationForContent reviewCycleDurationForContentOverride;
 
-    @Override
-    public void beforeSave() {
-        if (this.nextReviewDate == null) {
-            this.nextReviewDate = calculateNextReviewDate();
-        }
-    }
-
     public Date getReviewDate() {
         return reviewDate;
     }
