@@ -16,6 +16,7 @@ import com.psddev.cms.db.ToolUi;
 import com.psddev.cms.db.ToolUi.Cluster;
 import com.psddev.cms.db.ToolUi.Tab;
 import com.psddev.cms.ui.form.DynamicNoteMethod;
+import com.psddev.cms.ui.form.DynamicPlaceholderMethod;
 import com.psddev.cms.ui.form.DynamicTypeClass;
 import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Modification;
@@ -65,6 +66,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DynamicNoteMethod("getNextReviewDateNote")
+    @DynamicPlaceholderMethod("getNextReviewDateText")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
     @ToolUi.ReadOnly
     private Date nextReviewDate;
@@ -115,12 +117,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .orElse(null);
     }
 
-    public String getNextReviewDateNote() {
+    public Date getNextReviewDateText() {
         Date utcDue = getNextReviewDateIndex();
 
         if (utcDue != null) {
             FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-            return FORMAT.format(utcDue);
+            return utcDue;
         } else {
             return null;
         }
