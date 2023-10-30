@@ -66,13 +66,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
-    private String nextReviewDateField;
-
-    @Tab(REVIEW_CYCLE_TAB)
-    @Cluster(REVIEW_CYCLE_CLUSTER)
-    @InternalName(NEXT_REVIEW_DATE_FIELD)
     @ToolUi.ReadOnly
-    @ToolUi.Hidden
     private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
@@ -89,14 +83,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
-    }
-
-    public String getNextReviewDateField() {
-        return nextReviewDateField;
-    }
-
-    public void setNextReviewDateField(String nextReviewDateField) {
-        this.nextReviewDateField = nextReviewDateField;
     }
 
     public ReviewCycleDurationForContent getReviewCycleDuration() {
@@ -131,6 +117,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     public String getNextReviewDateNote() {
         Date utcDue = getNextReviewDateIndex();
+
         if (utcDue != null) {
             FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
             return FORMAT.format(utcDue);
