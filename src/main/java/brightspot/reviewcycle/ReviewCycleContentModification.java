@@ -80,7 +80,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Override
     public void beforeSave() {
         if (this.nextReviewDate == null) {
-            this.nextReviewDate = getNextReviewDateIndex();
+            this.nextReviewDate = new Date();
         }
     }
 
