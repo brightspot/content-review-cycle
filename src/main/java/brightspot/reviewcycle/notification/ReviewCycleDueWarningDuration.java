@@ -31,11 +31,6 @@ public class ReviewCycleDueWarningDuration extends Record {
     public ReviewCycleDueWarningDuration() {
     }
 
-    public ReviewCycleDueWarningDuration(CalendarField calendarField, int calendarFieldCount) {
-        this.calendarField = calendarField;
-        this.calendarFieldCount = calendarFieldCount;
-    }
-
     public CalendarField getCalendarField() {
         return calendarField;
     }

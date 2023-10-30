@@ -24,11 +24,6 @@ public class ReviewCycleDurationForContent extends Record {
     public ReviewCycleDurationForContent() {
     }
 
-    ReviewCycleDurationForContent(CalendarField calendarField, int calendarFieldCount) {
-        this.calendarField = calendarField;
-        this.calendarFieldCount = calendarFieldCount;
-    }
-
     public CalendarField getCalendarField() {
         return calendarField;
     }

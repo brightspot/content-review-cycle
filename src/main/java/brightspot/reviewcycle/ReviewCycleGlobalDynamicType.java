@@ -6,6 +6,9 @@ import com.psddev.cms.ui.form.DynamicType;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Recordable;
 
+/**
+ * ReviewCycleGlobalDynamicType hides review cycle controls on global content
+ */
 public class ReviewCycleGlobalDynamicType implements DynamicType {
 
     @Override
