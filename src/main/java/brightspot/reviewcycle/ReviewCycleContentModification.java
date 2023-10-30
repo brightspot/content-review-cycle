@@ -57,9 +57,8 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @Note("Last Revision Date")
+    @Note("Last Cycle Duration Date")
     @InternalName(REVIEW_DATE_FIELD)
-    @ToolUi.Hidden
     private Date reviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
@@ -127,8 +126,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     }
 
     private Date calculateNextReviewDate() {
-
-        ReviewCycleDurationForContent reviewCycleDurationForContent = getReviewCycleDuration();
 
         HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
         ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
