@@ -59,6 +59,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @Note("Last Cycle Duration Date")
     @InternalName(REVIEW_DATE_FIELD)
+    @ToolUi.ReadOnly
     private Date reviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
