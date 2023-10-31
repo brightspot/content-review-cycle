@@ -143,7 +143,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         if (reviewDate == null) {
             reviewDate = hasReviewCycle.as(Content.ObjectModification.class).getUpdateDate();
         }
-        return duration.addCycleDuration(new Date());
+
+        if (reviewDate.before(new Date())) {
+            return duration.addCycleDuration(new Date());
+        } else {
+             return duration.addCycleDuration(reviewDate);
+        }
     }
 
     @Override
