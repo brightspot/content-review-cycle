@@ -144,28 +144,20 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         long nowTime = new Date().toInstant().toEpochMilli();
         long result = nowTime - interval;
 
-        List<UUID> alreadySentItemsListIds = null;
+        List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
 
-        for (int i = 0; i < overridesList.size(); i++) {
-
-            // Get ids from overridesList
-            List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
-
-            // Returns a list of ids pertaining to notifications that have already been sent
-            alreadySentItemsListIds = Query.from(ReviewCycleDueNotification.class)
-                    .where("contentId = ?", overridesListIds)
-                    .and("publishedAt > ?", result)
-                    .selectAll()
-                    .stream()
-                    .map(ReviewCycleDueNotification::getContentId)
-                    .collect(Collectors.toList());
-        }
-
-        List<UUID> finalAlreadySentItemsListIds = alreadySentItemsListIds;
+        // Returns a list of ids pertaining to notifications that have already been sent
+        List<UUID> alreadySentItemsListIds = Query.from(ReviewCycleDueNotification.class)
+                .where("contentId = ?", overridesListIds)
+                .and("publishedAt > ?", result)
+                .selectAll()
+                .stream()
+                .map(ReviewCycleDueNotification::getContentId)
+                .collect(Collectors.toList());
 
         // Returns a list of ids pertaining to notifications that have NOT been sent
         return overridesList.stream()
-                .filter(override -> !finalAlreadySentItemsListIds.contains(override.getId()))
+                .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
     }
 
