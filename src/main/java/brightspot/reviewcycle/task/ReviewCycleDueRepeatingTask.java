@@ -4,6 +4,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import brightspot.reviewcycle.ReviewCycleContentTypeMap;
@@ -89,12 +91,15 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 LOGGER.info("Contents size: " + contents.size());
 
-                this.publishNotifications(contents);
+                List<Content> notYetSentContent = preventDuplicateNotificationRecords(contents);
+
+                this.publishNotifications(notYetSentContent);
             }
 
             List<Content> overridesList = new ArrayList<>();
 
             LOGGER.info("Searching cycle overrides configured content...");
+
             // Handle cycle overrides
 
             List<ReviewCycleDurationForContent> durations = Query.from(ReviewCycleDurationForContent.class).selectAll();
@@ -124,9 +129,44 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             LOGGER.info("Content overrides size: " + overridesList.size());
 
-            this.publishNotifications(overridesList);
+            List<Content> notYetSentContent = preventDuplicateNotificationRecords(overridesList);
+
+            this.publishNotifications(notYetSentContent);
+
         }
 
+    }
+
+    public List<Content> preventDuplicateNotificationRecords(List<Content> overridesList) {
+
+        // Limit to one notification sent per day of content
+        long interval = 86400000;
+        long nowTime = new Date().toInstant().toEpochMilli();
+        long result = nowTime - interval;
+
+        List<UUID> alreadySentItemsListIds = null;
+
+        for (int i = 0; i < overridesList.size(); i++) {
+
+            // Get ids from overridesList
+            List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
+
+            // Returns a list of ids pertaining to notifications that have already been sent
+            alreadySentItemsListIds = Query.from(ReviewCycleDueNotification.class)
+                    .where("contentId = ?", overridesListIds)
+                    .and("publishedAt > ?", result)
+                    .selectAll()
+                    .stream()
+                    .map(ReviewCycleDueNotification::getContentId)
+                    .collect(Collectors.toList());
+        }
+
+        List<UUID> finalAlreadySentItemsListIds = alreadySentItemsListIds;
+
+        // Returns a list of ids pertaining to notifications that have NOT been sent
+        return overridesList.stream()
+                .filter(override -> !finalAlreadySentItemsListIds.contains(override.getId()))
+                .collect(Collectors.toList());
     }
 
     /**

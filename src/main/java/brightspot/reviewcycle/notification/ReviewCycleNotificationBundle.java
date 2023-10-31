@@ -3,10 +3,12 @@ package brightspot.reviewcycle.notification;
 import java.util.Date;
 import java.util.UUID;
 
+import com.psddev.cms.db.Content;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
 
 @Recordable.Embedded
+@Content.Searchable
 public class ReviewCycleNotificationBundle extends Record {
 
     public ReviewCycleNotificationBundle() {
