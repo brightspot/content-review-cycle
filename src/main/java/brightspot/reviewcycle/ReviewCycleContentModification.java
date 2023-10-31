@@ -139,18 +139,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
         // Calculate the next review date based off of the last review date
         Date reviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getReviewDate();
-        Date nextReviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getNextReviewDate();
-
 
         if (reviewDate == null) {
             reviewDate = hasReviewCycle.as(Content.ObjectModification.class).getUpdateDate();
         }
 
-        if (nextReviewDate.before(new Date())) {
-            return duration.addCycleDuration(new Date());
-        } else {
-             return duration.addCycleDuration(reviewDate);
-        }
+        return duration.addCycleDuration(reviewDate);
     }
 
     @Override
