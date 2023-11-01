@@ -93,8 +93,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 LOGGER.info("Contents size: " + contents.size());
 
-                List<Content> notYetSentContent = dedupeNotificationRecords(contents);
-                this.publishNotifications(notYetSentContent);
+                dedupeNotificationRecords(contents);
             }
 
             List<Content> overridesList = new ArrayList<>();
@@ -130,14 +129,12 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             LOGGER.info("Content overrides size: " + overridesList.size());
 
-            List<Content> notYetSentContent = dedupeNotificationRecords(overridesList);
-            this.publishNotifications(notYetSentContent);
-
+            dedupeNotificationRecords(overridesList);
         }
 
     }
 
-    public List<Content> dedupeNotificationRecords(List<Content> overridesList) {
+    public void dedupeNotificationRecords(List<Content> overridesList) {
 
         // Limit to one notification sent per day of content
         long interval = 86400000;
@@ -161,12 +158,17 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 .where("contentId = ?", alreadySentItemsListIds)
                 .selectAll());
 
+        // If a specific notification has already been sent, we're going to update it
         updateNotifications(alreadySentNotifications);
 
         // Returns content pertaining to notifications that have NOT been sent
-        return overridesList.stream()
+        // If a specific notification has never been sent, we're going to publish it
+        List<Content> neverSentNotifications = overridesList.stream()
                 .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
+
+        publishNotifications(neverSentNotifications);
+
     }
 
     private void updateNotifications(List<ReviewCycleDueNotification> notifications) {
