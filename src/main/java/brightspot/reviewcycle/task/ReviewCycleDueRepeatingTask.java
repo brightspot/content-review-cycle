@@ -135,6 +135,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     }
 
+    /** Prevents duplicate notification records of content by checking if it has already been published initially */
     public void dedupeNotificationRecords(List<Content> overridesList) {
 
         List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
@@ -144,7 +145,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         for (UUID overridesListId : overridesListIds) {
             Query.from(ReviewCycleDueNotification.class)
-                    .where("contentId = ?", overridesListId)
+                    .where("getContentId = ?", overridesListId)
                     .selectAll()
                     .stream()
                     .map(ReviewCycleDueNotification::getContentId)
@@ -156,7 +157,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         for (UUID alreadySentItemsListId : alreadySentItemsListIds) {
             Query.from(ReviewCycleDueNotification.class)
-                    .where("contentId = ?", alreadySentItemsListId)
+                    .where("getContentId = ?", alreadySentItemsListId)
                     .findFirst().ifPresent(alreadySentNotifications::add);
         }
 

@@ -35,8 +35,13 @@ public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubsc
     }
 
     @Indexed
+    @Ignored(false)
     public UUID getContentId() {
-        return bundle.getContentId();
+
+        if (bundle != null) {
+            return bundle.getContentId();
+        }
+        return null;
     }
 
     public ReviewCycleDueNotification(String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
