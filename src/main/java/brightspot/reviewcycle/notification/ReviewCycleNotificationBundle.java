@@ -12,10 +12,10 @@ public class ReviewCycleNotificationBundle extends Record {
     public ReviewCycleNotificationBundle() {
     }
 
-    public ReviewCycleNotificationBundle(String contentLabel, UUID contentId, Date lastRunDate, Date dueDate, String ownerName) {
+    public ReviewCycleNotificationBundle(String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
         this.contentLabel = contentLabel;
         this.contentId = contentId;
-        this.lastRunDate = lastRunDate;
+        this.lastNotified = lastNotified;
         this.dueDate = dueDate;
         this.ownerName = ownerName;
     }
@@ -24,7 +24,7 @@ public class ReviewCycleNotificationBundle extends Record {
 
     private UUID contentId;
 
-    private Date lastRunDate;
+    private Date lastNotified;
 
     private Date dueDate;
 
@@ -46,12 +46,12 @@ public class ReviewCycleNotificationBundle extends Record {
         this.contentId = contentId;
     }
 
-    public Date getLastRunDate() {
-        return lastRunDate;
+    public Date getLastNotified() {
+        return lastNotified;
     }
 
-    public void setLastRunDate(Date lastRunDate) {
-        this.lastRunDate = lastRunDate;
+    public void setLastNotified(Date lastNotified) {
+        this.lastNotified = lastNotified;
     }
 
     public Date getDueDate() {

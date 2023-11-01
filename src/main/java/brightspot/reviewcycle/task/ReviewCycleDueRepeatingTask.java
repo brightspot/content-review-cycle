@@ -176,7 +176,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         for (ReviewCycleDueNotification notification : notifications) {
             ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
             if (reviewCycleNotificationBundle != null) {
-                notification.getBundle().setLastRunDate(new Date());
+                notification.getBundle().setLastNotified(new Date());
                 notification.saveImmediately();
             }
         }
