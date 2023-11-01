@@ -35,7 +35,6 @@ public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubsc
     }
 
     @Indexed
-    @Ignored(false)
     public UUID getContentId() {
 
         if (bundle != null) {
