@@ -137,16 +137,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     public void dedupeNotificationRecords(List<Content> overridesList) {
 
-        long interval = 86400000;
-        long nowTime = new Date().toInstant().toEpochMilli();
-        long result = nowTime - interval;
-
         List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
 
-        // Returns a list of ids pertaining to notifications that have already been sent
+        // Returns a list of ids pertaining to notifications that have already been created and sent
         List<UUID> alreadySentItemsListIds = Query.from(ReviewCycleDueNotification.class)
                 .where("contentId = ?", overridesListIds)
-                .and("publishedAt > ?", result)
                 .selectAll()
                 .stream()
                 .map(ReviewCycleDueNotification::getContentId)
@@ -157,8 +152,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 = new ArrayList<>(Query.from(ReviewCycleDueNotification.class)
                 .where("contentId = ?", alreadySentItemsListIds)
                 .selectAll());
-
-        // If a specific notification has already been sent, we're going to update it
         updateNotifications(alreadySentNotifications);
 
         // Returns content pertaining to notifications that have NOT been sent
@@ -166,7 +159,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         List<Content> neverSentNotifications = overridesList.stream()
                 .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
-
         publishNotifications(neverSentNotifications);
 
     }
