@@ -39,9 +39,9 @@ public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubsc
         return bundle.getContentId();
     }
 
-    public ReviewCycleDueNotification(String contentLabel, UUID contentId, Date dueDate, String ownerName) {
+    public ReviewCycleDueNotification(String contentLabel, UUID contentId, Date lastRunDate, Date dueDate, String ownerName) {
         super();
-        this.bundle = new ReviewCycleNotificationBundle(contentLabel, contentId, dueDate, ownerName);
+        this.bundle = new ReviewCycleNotificationBundle(contentLabel, contentId, lastRunDate, dueDate, ownerName);
         setPayload(bundle);
     }
 

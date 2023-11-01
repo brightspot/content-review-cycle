@@ -13,6 +13,7 @@ import brightspot.reviewcycle.ReviewCycleDurationForContent;
 import brightspot.reviewcycle.ReviewCycleSiteSettings;
 import brightspot.reviewcycle.notification.ReviewCycleDueNotification;
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
+import brightspot.reviewcycle.notification.ReviewCycleNotificationBundle;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Site;
 import com.psddev.cms.db.SiteSettings;
@@ -20,6 +21,9 @@ import com.psddev.dari.db.CompoundPredicate;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
 import com.psddev.dari.db.Query;
+import com.psddev.dari.db.Record;
+import com.psddev.dari.db.Recordable;
+import com.psddev.dari.db.State;
 import com.psddev.dari.util.RepeatingTask;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -91,8 +95,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 LOGGER.info("Contents size: " + contents.size());
 
-                List<Content> notYetSentContent = preventDuplicateNotificationRecords(contents);
-
+                List<Content> notYetSentContent = dedupeNotificationRecords(contents);
                 this.publishNotifications(notYetSentContent);
             }
 
@@ -129,15 +132,14 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             LOGGER.info("Content overrides size: " + overridesList.size());
 
-            List<Content> notYetSentContent = preventDuplicateNotificationRecords(overridesList);
-
+            List<Content> notYetSentContent = dedupeNotificationRecords(overridesList);
             this.publishNotifications(notYetSentContent);
 
         }
 
     }
 
-    public List<Content> preventDuplicateNotificationRecords(List<Content> overridesList) {
+    public List<Content> dedupeNotificationRecords(List<Content> overridesList) {
 
         // Limit to one notification sent per day of content
         long interval = 86400000;
@@ -155,10 +157,29 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 .map(ReviewCycleDueNotification::getContentId)
                 .collect(Collectors.toList());
 
-        // Returns a list of ids pertaining to notifications that have NOT been sent
+        // Update notifications that already exist with their last run date
+        List<ReviewCycleDueNotification> alreadySentNotifications
+                = new ArrayList<>(Query.from(ReviewCycleDueNotification.class)
+                .where("contentId = ?", alreadySentItemsListIds)
+                .selectAll());
+
+        updateNotifications(alreadySentNotifications);
+
+        // Returns content pertaining to notifications that have NOT been sent
         return overridesList.stream()
                 .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
+    }
+
+    private void updateNotifications(List<ReviewCycleDueNotification> notifications) {
+
+        for (ReviewCycleDueNotification notification : notifications) {
+            ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
+            if (reviewCycleNotificationBundle != null) {
+                reviewCycleNotificationBundle.setLastRunDate(new Date());
+                reviewCycleNotificationBundle.saveImmediately();
+            }
+        }
     }
 
     /**
@@ -175,9 +196,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             nextDue = content
                     .as(ReviewCycleContentModification.class)
                     .getNextReviewDateIndex();
+
             new ReviewCycleDueNotification(
                     content.getLabel(),
                     content.getId(),
+                    new Date(),
                     nextDue,
                     content.as(Site.ObjectModification.class).getOwner().getName()).publish();
         }
