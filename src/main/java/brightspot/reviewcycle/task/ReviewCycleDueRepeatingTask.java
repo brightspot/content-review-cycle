@@ -135,7 +135,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     public void dedupeNotificationRecords(List<Content> overridesList) {
 
-        // Limit to one notification sent per day of content
         long interval = 86400000;
         long nowTime = new Date().toInstant().toEpochMilli();
         long result = nowTime - interval;
