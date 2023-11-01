@@ -92,6 +92,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 LOGGER.info("Contents size: " + contents.size());
 
+                // Prevents duplication of notification records
                 dedupeNotificationRecords(contents);
             }
 
@@ -128,6 +129,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             LOGGER.info("Content overrides size: " + overridesList.size());
 
+            // Prevents duplication of notification records
             dedupeNotificationRecords(overridesList);
         }
 
