@@ -21,8 +21,6 @@ import com.psddev.dari.db.CompoundPredicate;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
 import com.psddev.dari.db.Query;
-import com.psddev.dari.db.Record;
-import com.psddev.dari.db.Recordable;
 import com.psddev.dari.db.State;
 import com.psddev.dari.util.RepeatingTask;
 import org.joda.time.DateTime;
@@ -176,8 +174,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         for (ReviewCycleDueNotification notification : notifications) {
             ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
             if (reviewCycleNotificationBundle != null) {
-                reviewCycleNotificationBundle.setLastRunDate(new Date());
-                reviewCycleNotificationBundle.saveImmediately();
+                notification.getBundle().setLastRunDate(new Date());
+                notification.saveImmediately();
             }
         }
     }
