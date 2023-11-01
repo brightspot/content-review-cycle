@@ -140,26 +140,39 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
 
         // Returns a list of ids pertaining to notifications that have already been created and sent
-        List<UUID> alreadySentItemsListIds = Query.from(ReviewCycleDueNotification.class)
-                .where("contentId = ?", overridesListIds)
-                .selectAll()
-                .stream()
-                .map(ReviewCycleDueNotification::getContentId)
-                .collect(Collectors.toList());
+        List<UUID> alreadySentItemsListIds = new ArrayList<>();
+
+        for (UUID overridesListId : overridesListIds) {
+            Query.from(ReviewCycleDueNotification.class)
+                    .where("contentId = ?", overridesListId)
+                    .selectAll()
+                    .stream()
+                    .map(ReviewCycleDueNotification::getContentId)
+                    .findFirst().ifPresent(alreadySentItemsListIds::add);
+        }
 
         // Update notifications that already exist with their last run date
-        List<ReviewCycleDueNotification> alreadySentNotifications
-                = new ArrayList<>(Query.from(ReviewCycleDueNotification.class)
-                .where("contentId = ?", alreadySentItemsListIds)
-                .selectAll());
-        updateNotifications(alreadySentNotifications);
+        List<ReviewCycleDueNotification> alreadySentNotifications = new ArrayList<>();
+
+        for (UUID alreadySentItemsListId : alreadySentItemsListIds) {
+            Query.from(ReviewCycleDueNotification.class)
+                    .where("contentId = ?", alreadySentItemsListId)
+                    .findFirst().ifPresent(alreadySentNotifications::add);
+        }
+
+        if (alreadySentNotifications.size() > 0) {
+            updateNotifications(alreadySentNotifications);
+        }
 
         // Returns content pertaining to notifications that have NOT been sent
         // If a specific notification has never been sent, we're going to publish it
         List<Content> neverSentNotifications = overridesList.stream()
                 .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
-        publishNotifications(neverSentNotifications);
+
+        if (neverSentNotifications.size() > 0) {
+            publishNotifications(neverSentNotifications);
+        }
 
     }
 
