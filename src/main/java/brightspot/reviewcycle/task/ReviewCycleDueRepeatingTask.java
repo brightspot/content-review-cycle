@@ -205,7 +205,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 }
                 notification.getBundle().setLastNotified(new Date());
-                notification.saveImmediately();
+                notification.publish();
             }
         }
     }
