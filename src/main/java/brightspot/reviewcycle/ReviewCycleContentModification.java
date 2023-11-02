@@ -211,7 +211,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
         // Check for override
         if (this.getReviewCycleDurationForContentOverride() != null) {
-            setNextReviewDate(getNextReviewDateIndex());
+            nextReviewDate = getNextReviewDateIndex();
             return new ReviewCycleContentTypeMap(
                 originalObjectType,
                 this.getReviewCycleDurationForContentOverride());
