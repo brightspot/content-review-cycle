@@ -146,11 +146,12 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
      */
     public void dedupeNotificationRecords(List<Content> contentList) {
 
+        // Get contentList ids
         List<UUID> overridesListIds = contentList.stream().map(Content::getId).collect(Collectors.toList());
 
         List<ReviewCycleDueNotification> reviewCycleDueNotifications = new ArrayList<>();
 
-        // Get all notifications that need to be sent out
+        // Get all notifications from the content ids
         for (UUID overridesListId : overridesListIds) {
             ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
                     .where("getContentId = ?", overridesListId)
@@ -161,14 +162,19 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             }
         }
 
+        // We want to send out notifications ONCE daily
         long now = Instant.now().toEpochMilli();
         long interval = 86400000;
 
+        /* If there are more than 0 notifications that have been sent out today, we update notification records
+         because that means publishedNotifications has been called.
+         */
         if (Query.from(ReviewCycleDueNotification.class)
             .where("publishedAt = ?", now - interval)
             .hasMoreThan(0)) {
             updateNotificationRecordsPerDay(reviewCycleDueNotifications);
         } else {
+            // Else if there are 0 that have been
             publishNotifications(contentList);
         }
     }
