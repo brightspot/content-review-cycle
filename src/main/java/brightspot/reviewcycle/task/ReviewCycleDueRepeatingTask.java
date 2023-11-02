@@ -196,15 +196,16 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             if (reviewCycleNotificationBundle != null) {
                 LOGGER.info("Updating Notification for " + reviewCycleNotificationBundle.getContentLabel());
                 // Calculate date
-
                 if (reviewCycleNotificationBundle.getContent() != null) {
                     nextDue = reviewCycleNotificationBundle.getContent()
                             .as(ReviewCycleContentModification.class)
                             .getNextReviewDateIndex();
-                    notification.getBundle().setDueDate(nextDue);
-
+                    reviewCycleNotificationBundle.setDueDate(nextDue);
                 }
-                notification.getBundle().setLastNotified(new Date());
+
+                reviewCycleNotificationBundle.setLastNotified(new Date());
+                reviewCycleNotificationBundle.saveImmediately();
+                notification.setBundle(reviewCycleNotificationBundle);
                 notification.publish();
             }
         }
