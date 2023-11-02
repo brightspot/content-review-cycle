@@ -85,12 +85,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         this.reviewDate = reviewDate;
     }
 
-    public ReviewCycleDurationForContent getReviewCycleDuration() {
+    public ReviewCycleDurationForContent getReviewCycleDurationForContentOverride() {
         return reviewCycleDurationForContentOverride;
     }
 
-    public void setReviewCycleDuration(ReviewCycleDurationForContent reviewCycleDurationForContent) {
-        this.reviewCycleDurationForContentOverride = reviewCycleDurationForContent;
+    public void setReviewCycleDuration(ReviewCycleDurationForContent reviewCycleDurationForContentOverride) {
+        this.reviewCycleDurationForContentOverride = reviewCycleDurationForContentOverride;
     }
 
     public Date getNextReviewDate() {
@@ -210,10 +210,11 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         }
 
         // Check for override
-        if (this.getReviewCycleDuration() != null) {
+        if (this.getReviewCycleDurationForContentOverride() != null) {
+            setNextReviewDate(getNextReviewDateIndex());
             return new ReviewCycleContentTypeMap(
                 originalObjectType,
-                this.getReviewCycleDuration());
+                this.getReviewCycleDurationForContentOverride());
         } else {
 
             Site site = getOriginalObject().as(Site.ObjectModification.class).getOwner();
