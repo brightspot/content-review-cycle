@@ -3,7 +3,9 @@ package brightspot.reviewcycle.task;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -163,14 +165,24 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         }
 
         // We want to send out notifications ONCE daily
-        long now = Instant.now().toEpochMilli();
-        long interval = 86400000;
+
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        Long d1 = c.getTime().toInstant().toEpochMilli();
+
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        Long d2 = c.getTime().toInstant().toEpochMilli();
 
         /* If there are more than 0 notifications that have been sent out today, we only update notification records
             not creating new ones (until the next day), because that means publishedNotifications has been called.
          */
         boolean notificationsSentOutToday = Query.from(ReviewCycleDueNotification.class)
-                .where("publishedAt = ?", now - interval)
+                .where("publishedAt > ?", d1)
+                .and("publishedAt < ?", d2)
                 .hasMoreThan(0);
 
         if (notificationsSentOutToday) {
