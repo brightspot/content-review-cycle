@@ -45,6 +45,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         this.site = site;
     }
 
+    /**
+     * Repeating task to send notifications
+     */
     @Override
     public void doRepeatingTask(DateTime runTime) {
 
@@ -135,10 +138,14 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     }
 
-    /** Prevents duplicate notification records of content by checking if it has already been published initially */
-    public void dedupeNotificationRecords(List<Content> overridesList) {
+    /**
+     * Prevents duplicate notification records of content by checking if it has already been published initially
+     *
+     * @param contentList list of content needed to be published or updated.
+     */
+    public void dedupeNotificationRecords(List<Content> contentList) {
 
-        List<UUID> overridesListIds = overridesList.stream().map(Content::getId).collect(Collectors.toList());
+        List<UUID> overridesListIds = contentList.stream().map(Content::getId).collect(Collectors.toList());
 
         // Returns a list of ids pertaining to notifications that have already been created and sent
         List<UUID> alreadySentItemsListIds = new ArrayList<>();
@@ -167,7 +174,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         // Returns content pertaining to notifications that have NOT been sent
         // If a specific notification has never been sent, we're going to publish it
-        List<Content> neverSentNotifications = overridesList.stream()
+        List<Content> neverSentNotifications = contentList.stream()
                 .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
                 .collect(Collectors.toList());
 
@@ -177,11 +184,22 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
     }
 
+    /**
+     * Takes in a list of notifications and modifies them by setting their last notified date to current date time.
+     *
+     * @param notifications list of notifications.
+     */
     private void updateNotifications(List<ReviewCycleDueNotification> notifications) {
-
         for (ReviewCycleDueNotification notification : notifications) {
+            Date nextDue;
             ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
             if (reviewCycleNotificationBundle != null) {
+                LOGGER.info("Updating Notification for " + reviewCycleNotificationBundle.getContentLabel());
+                // Calculate date
+                nextDue = reviewCycleNotificationBundle.getContent()
+                        .as(ReviewCycleContentModification.class)
+                        .getNextReviewDateIndex();
+                notification.getBundle().setDueDate(nextDue);
                 notification.getBundle().setLastNotified(new Date());
                 notification.saveImmediately();
             }
@@ -204,6 +222,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     .getNextReviewDateIndex();
 
             new ReviewCycleDueNotification(
+                    content,
                     content.getLabel(),
                     content.getId(),
                     new Date(),
@@ -236,7 +255,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
 
-        // Keeping this at a minute for QA testing purposes
         return everyMinute(currentTime);
     }
 

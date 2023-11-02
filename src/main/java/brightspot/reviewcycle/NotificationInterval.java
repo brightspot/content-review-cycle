@@ -1,8 +1,8 @@
 package brightspot.reviewcycle;
 
 /**
- * Enum used in @see {@link brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration}
- * and @see {@link ReviewCycleDurationForContent} for distinction between days, months, and years.
+ * Enum used in {@link brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration}
+ * and {@link ReviewCycleDurationForContent} for distinction between days, months, and years.
  */
 public enum NotificationInterval {
 

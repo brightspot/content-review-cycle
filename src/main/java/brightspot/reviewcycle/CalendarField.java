@@ -3,8 +3,8 @@ package brightspot.reviewcycle;
 import java.util.Calendar;
 
 /**
- * Enum used in @see {@link brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration}
- * and @see {@link brightspot.reviewcycle.ReviewCycleDurationForContent} for distinction between days, months, and years.
+ * Enum used in {@link brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration}
+ * and {@link brightspot.reviewcycle.ReviewCycleDurationForContent} for distinction between days, months, and years.
  */
 public enum CalendarField {
 

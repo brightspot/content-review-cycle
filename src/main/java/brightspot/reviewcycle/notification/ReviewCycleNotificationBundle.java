@@ -3,6 +3,7 @@ package brightspot.reviewcycle.notification;
 import java.util.Date;
 import java.util.UUID;
 
+import com.psddev.cms.db.Content;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
 
@@ -12,13 +13,16 @@ public class ReviewCycleNotificationBundle extends Record {
     public ReviewCycleNotificationBundle() {
     }
 
-    public ReviewCycleNotificationBundle(String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
+    public ReviewCycleNotificationBundle(Content content, String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
+        this.content = content;
         this.contentLabel = contentLabel;
         this.contentId = contentId;
         this.lastNotified = lastNotified;
         this.dueDate = dueDate;
         this.ownerName = ownerName;
     }
+
+    private Content content;
 
     private String contentLabel;
 
@@ -29,6 +33,14 @@ public class ReviewCycleNotificationBundle extends Record {
     private Date dueDate;
 
     private String ownerName;
+
+    public Content getContent() {
+        return content;
+    }
+
+    public void setContent(Content content) {
+        this.content = content;
+    }
 
     public String getContentLabel() {
         return contentLabel;

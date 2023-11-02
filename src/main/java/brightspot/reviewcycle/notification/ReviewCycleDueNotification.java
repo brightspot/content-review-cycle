@@ -10,7 +10,7 @@ import com.psddev.dari.notification.Subscriber;
 import com.psddev.watch.WatcherObjectModification;
 
 /**
- * Used in @see {@link brightspot.reviewcycle.task.ReviewCycleDueRepeatingTask} for publishing notifications
+ * Used in {@link brightspot.reviewcycle.task.ReviewCycleDueRepeatingTask} for publishing notifications
  */
 public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubscription, ReviewCycleNotificationBundle> {
 
@@ -43,9 +43,9 @@ public class ReviewCycleDueNotification extends Notification<ReviewCycleDueSubsc
         return null;
     }
 
-    public ReviewCycleDueNotification(String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
+    public ReviewCycleDueNotification(Content content, String contentLabel, UUID contentId, Date lastNotified, Date dueDate, String ownerName) {
         super();
-        this.bundle = new ReviewCycleNotificationBundle(contentLabel, contentId, lastNotified, dueDate, ownerName);
+        this.bundle = new ReviewCycleNotificationBundle(content, contentLabel, contentId, lastNotified, dueDate, ownerName);
         setPayload(bundle);
     }
 

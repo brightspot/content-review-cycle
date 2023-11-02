@@ -19,7 +19,7 @@ import com.psddev.dari.db.Record;
 
 /**
  * This file is associated with the due warning duration for a content type. It utilizes
- * the @see {@link CalendarField} enum which can be a specific amount of days, months, or years.
+ * the {@link CalendarField} enum which can be a specific amount of days, months, or years.
  */
 public class ReviewCycleDueWarningDuration extends Record {
 
