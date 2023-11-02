@@ -169,9 +169,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         /* If there are more than 0 notifications that have been sent out today, we update notification records
          because that means publishedNotifications has been called.
          */
-        if (Query.from(ReviewCycleDueNotification.class)
-            .where("publishedAt = ?", now - interval)
-            .hasMoreThan(0)) {
+        boolean notificationsSentOutToday = Query.from(ReviewCycleDueNotification.class)
+                .where("publishedAt = ?", now - interval)
+                .hasMoreThan(0);
+
+        if (notificationsSentOutToday) {
             updateNotificationRecordsPerDay(reviewCycleDueNotifications);
         } else {
             // Else if there are 0 that have been
