@@ -1,5 +1,6 @@
 package brightspot.reviewcycle.task;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -147,41 +148,29 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         List<UUID> overridesListIds = contentList.stream().map(Content::getId).collect(Collectors.toList());
 
-        // Returns a list of ids pertaining to notifications that have already been created and sent
-        List<UUID> alreadySentItemsListIds = new ArrayList<>();
+        List<ReviewCycleDueNotification> reviewCycleDueNotifications = new ArrayList<>();
 
+        // Get all notifications that need to be sent out
         for (UUID overridesListId : overridesListIds) {
-            Query.from(ReviewCycleDueNotification.class)
+            ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
                     .where("getContentId = ?", overridesListId)
-                    .selectAll()
-                    .stream()
-                    .map(ReviewCycleDueNotification::getContentId)
-                    .findFirst().ifPresent(alreadySentItemsListIds::add);
+                    .first();
+
+            if (notification != null) {
+                reviewCycleDueNotifications.add(notification);
+            }
         }
 
-        // Update notifications that already exist with their last run date
-        List<ReviewCycleDueNotification> alreadySentNotifications = new ArrayList<>();
+        long now = Instant.now().toEpochMilli();
+        long interval = 86400000;
 
-        for (UUID alreadySentItemsListId : alreadySentItemsListIds) {
-            Query.from(ReviewCycleDueNotification.class)
-                    .where("getContentId = ?", alreadySentItemsListId)
-                    .findFirst().ifPresent(alreadySentNotifications::add);
+        if (Query.from(ReviewCycleDueNotification.class)
+            .where("publishedAt = ?", now - interval)
+            .hasMoreThan(0)) {
+            updateNotificationRecordsPerDay(reviewCycleDueNotifications);
+        } else {
+            publishNotifications(contentList);
         }
-
-        if (alreadySentNotifications.size() > 0) {
-            updateNotifications(alreadySentNotifications);
-        }
-
-        // Returns content pertaining to notifications that have NOT been sent
-        // If a specific notification has never been sent, we're going to publish it
-        List<Content> neverSentNotifications = contentList.stream()
-                .filter(override -> !alreadySentItemsListIds.contains(override.getId()))
-                .collect(Collectors.toList());
-
-        if (neverSentNotifications.size() > 0) {
-            publishNotifications(neverSentNotifications);
-        }
-
     }
 
     /**
@@ -189,7 +178,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
      *
      * @param notifications list of notifications.
      */
-    private void updateNotifications(List<ReviewCycleDueNotification> notifications) {
+    private void updateNotificationRecordsPerDay(List<ReviewCycleDueNotification> notifications) {
         for (ReviewCycleDueNotification notification : notifications) {
             Date nextDue;
             ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
@@ -200,12 +189,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     nextDue = reviewCycleNotificationBundle.getContent()
                             .as(ReviewCycleContentModification.class)
                             .getNextReviewDateIndex();
-                    reviewCycleNotificationBundle.setDueDate(nextDue);
-                }
+                    notification.getBundle().setDueDate(nextDue);
 
-                reviewCycleNotificationBundle.setLastNotified(new Date());
-                reviewCycleNotificationBundle.saveImmediately();
-                notification.setBundle(reviewCycleNotificationBundle);
+                }
+                notification.getBundle().setLastNotified(new Date());
+                notification.getBundle().saveImmediately();
                 notification.publish();
             }
         }
