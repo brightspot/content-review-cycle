@@ -166,8 +166,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         long now = Instant.now().toEpochMilli();
         long interval = 86400000;
 
-        /* If there are more than 0 notifications that have been sent out today, we update notification records
-         because that means publishedNotifications has been called.
+        /* If there are more than 0 notifications that have been sent out today, we only update notification records
+            not creating new ones (until the next day), because that means publishedNotifications has been called.
          */
         boolean notificationsSentOutToday = Query.from(ReviewCycleDueNotification.class)
                 .where("publishedAt = ?", now - interval)
