@@ -42,7 +42,6 @@ public class ReviewCycleContentTypeMap extends Record {
         }
     }
 
-
     public ObjectType getContentType() {
         return contentType;
     }
