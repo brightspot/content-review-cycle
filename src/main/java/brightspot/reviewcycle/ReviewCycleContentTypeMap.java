@@ -5,13 +5,12 @@ import java.util.Date;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.ui.LocalizationContext;
 import com.psddev.cms.ui.ToolLocalization;
-import com.psddev.cms.ui.ToolRequest;
+import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Predicate;
 import com.psddev.dari.db.PredicateParser;
 import com.psddev.dari.db.Record;
 import com.psddev.dari.db.Recordable;
-import com.psddev.dari.web.WebRequest;
 
 /**
  * The ReviewCycleContentMap is associated with a specific content type and its cycle duration. Each
@@ -34,13 +33,9 @@ public class ReviewCycleContentTypeMap extends Record {
     @Where("groups = " + HasReviewCycle.INTERNAL_NAME + " and isAbstract = false")
     private ObjectType contentType;
 
+    @Required
+    @Note("Cycle Duration should be longer than the Banner Warning Duration to prevent content always in review.")
     private ReviewCycleDurationForContent cycleDuration;
-
-    public void afterSave() {
-        if (getCycleDuration() == null) {
-            setCycleDuration(getDefaultCycleDurationFallback());
-        }
-    }
 
     public ObjectType getContentType() {
         return contentType;
@@ -56,10 +51,6 @@ public class ReviewCycleContentTypeMap extends Record {
 
     public void setCycleDuration(ReviewCycleDurationForContent cycleDuration) {
         this.cycleDuration = cycleDuration;
-    }
-
-    private ReviewCycleDurationForContent getDefaultCycleDurationFallback() {
-        return WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite().as(ReviewCycleSiteSettings.class).getSettings().getReviewCycleDurationForContent();
     }
 
     @Override

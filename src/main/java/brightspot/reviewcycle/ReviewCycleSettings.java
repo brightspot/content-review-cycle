@@ -28,10 +28,6 @@ public class ReviewCycleSettings extends Record {
     public static final String CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME = FIELD_PREFIX + CONTENT_TYPE_MAPS_FIELD;
 
     @Required
-    @DisplayName("Default Cycle Duration")
-    private ReviewCycleDurationForContent reviewCycleDurationForContent;
-
-    @Required
     @DisplayName("Banner Warning Duration")
     @Note("The freshness banner will appear on content when the review cycle due date is within this amount of time.")
     private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
@@ -49,14 +45,6 @@ public class ReviewCycleSettings extends Record {
 
     @ToolUi.Hidden
     private Site owner;
-
-    public ReviewCycleDurationForContent getReviewCycleDurationForContent() {
-        return reviewCycleDurationForContent;
-    }
-
-    public void setReviewCycleDurationForContent(ReviewCycleDurationForContent reviewCycleDurationForContent) {
-        this.reviewCycleDurationForContent = reviewCycleDurationForContent;
-    }
 
     public ReviewCycleDueWarningDuration getReviewCycleDueWarningDuration() {
         return reviewCycleDueWarningDuration;
