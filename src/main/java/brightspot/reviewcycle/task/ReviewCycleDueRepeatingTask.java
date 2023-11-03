@@ -194,7 +194,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         if (notificationsSentOutToday) {
             updateNotificationRecordsPerDay(reviewCycleDueNotifications);
         } else {
-            // Else if there are 0 that have been
+            // Else if there are 0 that have been sent out
             publishNotifications(contentList);
         }
     }
