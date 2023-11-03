@@ -36,12 +36,12 @@ public class ReviewCycleContentTypeMap extends Record {
 
     private ReviewCycleDurationForContent cycleDuration;
 
-    @Override
-    public void beforeSave() {
+    public void afterSave() {
         if (getCycleDuration() == null) {
             setCycleDuration(getDefaultCycleDurationFallback());
         }
     }
+
 
     public ObjectType getContentType() {
         return contentType;
