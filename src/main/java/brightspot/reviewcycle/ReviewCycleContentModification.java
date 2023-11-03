@@ -121,7 +121,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             nextReviewDate = FORMAT.format(utcDue);
         }
 
-        return "Setting this override will calculate the next review date to " + nextReviewDate + " which is from the last cycle duration date. ";
+        return "Next review date is " + nextReviewDate + " which is from the last cycle duration date. ";
     }
 
     private Date calculateNextReviewDate() {
