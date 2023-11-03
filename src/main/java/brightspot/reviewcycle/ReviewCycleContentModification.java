@@ -14,6 +14,7 @@ import com.psddev.cms.db.SiteSettings;
 import com.psddev.cms.db.ToolUi;
 import com.psddev.cms.db.ToolUi.Cluster;
 import com.psddev.cms.db.ToolUi.Tab;
+import com.psddev.cms.ui.form.DynamicNoteMethod;
 import com.psddev.cms.ui.form.DynamicTypeClass;
 import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Modification;
@@ -69,6 +70,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
+    @DynamicNoteMethod("getNextReviewDateIndex")
     @Note("Setting this override will calculate the next review date from the last cycle duration date, therefore it is recommended you start or cancel the review before modifying it. ")
     @InternalName(REVIEW_CYCLE_DURATION_FIELD)
     @Indexed
@@ -121,11 +123,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(ReviewCycleContentTypeMap::getCycleDuration)
             .orElse(null);
 
-        return calculateParent(duration, hasReviewCycle);
-    }
-
-    private Date calculateParent(ReviewCycleDurationForContent duration, HasReviewCycle hasReviewCycle) {
-
         if (duration == null) {
             return null;
         }
@@ -138,6 +135,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         }
 
         return duration.addCycleDuration(reviewDate);
+
     }
 
     @Override
@@ -200,60 +198,24 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             return null;
         }
 
-        setNextReviewDate(calculateNextReviewDateOverride());
-
-        return checkForOverrides(originalObjectType);
-
-    }
-
-    private ReviewCycleContentTypeMap checkForOverrides(ObjectType originalObjectType) {
-
-        ReviewCycleContentTypeMap result = null;
-
+        // Check for override
         if (this.getReviewCycleDurationForContentOverride() != null) {
-            result = new ReviewCycleContentTypeMap(
+            return new ReviewCycleContentTypeMap(
                     originalObjectType,
                     this.getReviewCycleDurationForContentOverride());
         } else {
+
             Site site = getOriginalObject().as(Site.ObjectModification.class).getOwner();
             if (site != null) {
                 List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
                         site,
                         s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
-                result = mapsList.stream()
+                return mapsList.stream()
                         .filter(map -> map.getContentType().equals(originalObjectType))
                         .findFirst().orElse(null);
             }
         }
 
-        return result;
-    }
-
-    private Date calculateNextReviewDateOverride() {
-
-        HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
-        ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
-                .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
-                .map(ReviewCycleContentModification::getReviewCycleMapOverride)
-                .map(ReviewCycleContentTypeMap::getCycleDuration)
-                .orElse(null);
-
-        return calculateParent(duration, hasReviewCycle);
-    }
-
-    public ReviewCycleContentTypeMap getReviewCycleMapOverride() {
-
-        if (!(getOriginalObject() instanceof Record)) {
-            return null;
-        }
-
-        ObjectType originalObjectType = ObjectType.getInstance(getOriginalObject().getClass());
-
-        if (originalObjectType == null) {
-            return null;
-        }
-
-        // Check for overrides
-        return checkForOverrides(originalObjectType);
+        return null;
     }
 }

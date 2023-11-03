@@ -166,10 +166,17 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         // Get all notifications from the content ids
         for (UUID overridesListId : overridesListIds) {
+
             ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
                     .where("getContentId = ?", overridesListId)
                     .and("publishedAt >= ?", d1)
                     .first();
+
+            if (notification == null) {
+                notification = Query.from(ReviewCycleDueNotification.class)
+                        .where("getContentId = ?", overridesListId)
+                        .first();
+            }
 
             if (notification != null) {
                 reviewCycleDueNotifications.add(notification);
@@ -266,7 +273,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
 
-        return everyMinute(currentTime);
+        return everyHour(currentTime);
     }
 
 }
