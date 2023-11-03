@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Draft;
@@ -16,7 +17,6 @@ import com.psddev.cms.db.ToolUi.Cluster;
 import com.psddev.cms.db.ToolUi.Tab;
 import com.psddev.cms.ui.form.DynamicNoteMethod;
 import com.psddev.cms.ui.form.DynamicTypeClass;
-import com.psddev.cms.ui.form.Note;
 import com.psddev.dari.db.Modification;
 import com.psddev.dari.db.ObjectType;
 import com.psddev.dari.db.Record;
@@ -64,14 +64,13 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @InternalName(NEXT_REVIEW_DATE_FIELD)
-    @ToolUi.ReadOnly
+    @ToolUi.Hidden
     private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
-    @DynamicNoteMethod("getNextReviewDateIndex")
-    @Note("Setting this override will calculate the next review date from the last cycle duration date, therefore it is recommended you start or cancel the review before modifying it. ")
+    @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(REVIEW_CYCLE_DURATION_FIELD)
     @Indexed
     private ReviewCycleDurationForContent reviewCycleDurationForContentOverride;
@@ -112,6 +111,17 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
             .map(Date::from)
             .orElse(null);
+    }
+
+    public String getNextReviewDateNote() {
+        Date utcDue = getNextReviewDateIndex();
+        String nextReviewDate = "N/A";
+        if (utcDue != null) {
+            FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+            nextReviewDate = FORMAT.format(utcDue);
+        }
+
+        return "Setting this override will calculate the next review date to " + nextReviewDate + " which is from the last cycle duration date. ";
     }
 
     private Date calculateNextReviewDate() {
