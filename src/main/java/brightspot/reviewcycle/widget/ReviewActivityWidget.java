@@ -15,10 +15,13 @@ import java.util.stream.Collectors;
 
 import brightspot.reviewcycle.HasReviewCycle;
 import brightspot.reviewcycle.ReviewCycleContentModification;
+import brightspot.reviewcycle.ReviewCycleContentTypeMap;
+import brightspot.reviewcycle.ReviewCycleSiteSettings;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.Directory;
 import com.psddev.cms.db.Site;
+import com.psddev.cms.db.SiteSettings;
 import com.psddev.cms.db.ToolUi;
 import com.psddev.cms.db.ToolUser;
 import com.psddev.cms.tool.Dashboard;
@@ -64,6 +67,13 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         // Check types configured in sites & settings and at the content level */
         Site site = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite();
 
+        List<ObjectType> mapsList = SiteSettings.get(
+                site,
+                s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps())
+                .stream()
+                .map(ReviewCycleContentTypeMap::getContentType)
+                .collect(Collectors.toList());
+
         List<ObjectType> configuredObjectTypes;
 
         if (site == null) {
@@ -79,6 +89,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .map(String.class::cast)
                     .map(UuidUtils::fromString)
                     .map(ObjectType::getInstance)
+                    .filter(mapsList::contains)
                     .sorted()
                     .collect(Collectors.toList());
         } else {
@@ -95,6 +106,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .map(String.class::cast)
                     .map(UuidUtils::fromString)
                     .map(ObjectType::getInstance)
+                    .filter(mapsList::contains)
                     .sorted()
                     .collect(Collectors.toList());
         }
