@@ -89,7 +89,6 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .map(String.class::cast)
                     .map(UuidUtils::fromString)
                     .map(ObjectType::getInstance)
-                    .filter(mapsList::contains)
                     .sorted()
                     .collect(Collectors.toList());
         } else {
