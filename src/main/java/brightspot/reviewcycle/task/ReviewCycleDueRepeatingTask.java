@@ -155,13 +155,14 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         // We want to send out notifications ONCE daily AND to the latest notifications
         long interval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
         long currentTime = Instant.now().toEpochMilli();
+        long currentDate = new Date(currentTime).toInstant().toEpochMilli();
 
         // Get all notifications from the content ids
         for (int i = 0; i < overridesListIds.size(); i++) {
 
             ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
                     .where("getContentId = ?", overridesListIds.get(i))
-                    .and("publishedAt >= ?", currentTime)
+                    .and("publishedAt >= ?", currentDate)
                     .first();
 
             if (notification != null) {
