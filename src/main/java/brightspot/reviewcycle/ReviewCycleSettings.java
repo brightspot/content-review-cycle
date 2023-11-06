@@ -28,14 +28,14 @@ public class ReviewCycleSettings extends Record {
     public static final String CONTENT_TYPE_MAPS_FIELD_INTERNAL_NAME = FIELD_PREFIX + CONTENT_TYPE_MAPS_FIELD;
 
     @Required
-    @DisplayName("Banner Warning Duration")
-    @Note("The freshness banner will appear on content when the review cycle due date is within this amount of time.")
-    private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
-
-    @Required
     @InternalName(ReviewCycleSettings.CONTENT_TYPE_MAPS_FIELD)
     @DisplayName("Content Types")
     private List<ReviewCycleContentTypeMap> contentTypeMaps;
+
+    @Required
+    @DisplayName("Banner Warning Notification")
+    @Note("This specifies how long before the next cycle review date that the banner appears on the content edit page.")
+    private ReviewCycleDueWarningDuration reviewCycleDueWarningDuration;
 
     @Required
     @ToolUi.Cluster("Notification Settings")
