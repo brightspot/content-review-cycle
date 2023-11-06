@@ -29,6 +29,7 @@ import com.psddev.dari.db.State;
  */
 @ToolUi.FieldInternalNamePrefix(ReviewCycleContentModification.FIELD_PREFIX)
 @DynamicTypeClass(ReviewCycleGlobalDynamicType.class)
+@DynamicTypeClass(ReviewCycleOverrideType.class)
 public class ReviewCycleContentModification extends Modification<HasReviewCycle> {
 
     private static final String REVIEW_CYCLE_CLUSTER = "Review Cycle Overrides";

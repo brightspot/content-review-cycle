@@ -165,6 +165,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         c.set(Calendar.SECOND, 59);
         Long d2 = c.getTime().toInstant().toEpochMilli();
 
+        // publishedAt > (now - interval).hasMoreThan(0);
+
         // Get all notifications from the content ids
         for (int i = 0; i < overridesListIds.size(); i++) {
 
@@ -176,6 +178,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             if (notification != null) {
                 reviewCycleDueNotifications.add(notification);
             } else {
+                // If notification is null, meaning it has never been updated today, publish it.
                 publishNotifications(Collections.singletonList(contentList.get(i)));
             }
         }
