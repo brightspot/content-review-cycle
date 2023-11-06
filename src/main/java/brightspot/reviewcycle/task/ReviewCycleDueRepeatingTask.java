@@ -1,11 +1,10 @@
 package brightspot.reviewcycle.task;
 
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -154,25 +153,15 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         List<ReviewCycleDueNotification> reviewCycleDueNotifications = new ArrayList<>();
 
         // We want to send out notifications ONCE daily AND to the latest notifications
-        Calendar c = new GregorianCalendar();
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        Long d1 = c.getTime().toInstant().toEpochMilli();
-
-        c.set(Calendar.HOUR_OF_DAY, 23);
-        c.set(Calendar.MINUTE, 59);
-        c.set(Calendar.SECOND, 59);
-        Long d2 = c.getTime().toInstant().toEpochMilli();
-
-        // publishedAt > (now - interval).hasMoreThan(0);
+        long interval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        long currentTime = Instant.now().toEpochMilli();
 
         // Get all notifications from the content ids
         for (int i = 0; i < overridesListIds.size(); i++) {
 
             ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
                     .where("getContentId = ?", overridesListIds.get(i))
-                    .and("publishedAt >= ?", d1)
+                    .and("publishedAt >= ?", currentTime)
                     .first();
 
             if (notification != null) {
@@ -187,8 +176,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             not creating new ones (until the next day), because that means publishedNotifications has been called.
          */
         boolean notificationsSentOutToday = Query.from(ReviewCycleDueNotification.class)
-                .where("publishedAt >= ?", d1)
-                .and("publishedAt <= ?", d2)
+                .where("publishedAt >= ?", currentTime - interval)
                 .hasMoreThan(0);
 
         if (notificationsSentOutToday) {
