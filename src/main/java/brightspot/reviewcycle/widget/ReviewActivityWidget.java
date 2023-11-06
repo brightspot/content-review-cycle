@@ -67,13 +67,6 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         // Check types configured in sites & settings and at the content level */
         Site site = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite();
 
-        List<ObjectType> mapsList = SiteSettings.get(
-                site,
-                s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps())
-                .stream()
-                .map(ReviewCycleContentTypeMap::getContentType)
-                .collect(Collectors.toList());
-
         List<ObjectType> configuredObjectTypes;
 
         if (site == null) {
@@ -92,6 +85,14 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .sorted()
                     .collect(Collectors.toList());
         } else {
+
+            List<ObjectType> mapsList = SiteSettings.get(
+                            site,
+                            s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps())
+                    .stream()
+                    .map(ReviewCycleContentTypeMap::getContentType)
+                    .collect(Collectors.toList());
+
             configuredObjectTypes = Query.from(HasReviewCycle.class)
                     .where("* matches *")
                     .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
