@@ -110,27 +110,47 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             List<ReviewCycleDurationForContent> durations = Query.from(ReviewCycleDurationForContent.class).selectAll();
 
-            for (ReviewCycleDurationForContent duration : durations) {
+            if (durations.size() > 0) {
+                for (ReviewCycleDurationForContent duration : durations) {
+                    // Generate predicate
+                    Predicate datePredicate = PredicateParser.Static.parse(
+                            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + " != missing and "
+                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + " < ?", now.getTime());
 
-                // Generate predicate
-                Predicate datePredicate = PredicateParser.Static.parse(
-                        ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                                + " != missing and "
-                                + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
-                                + " < ?", now.getTime());
+                    dueNowOrWarningPredicate = CompoundPredicate.combine(
+                            PredicateParser.OR_OPERATOR,
+                            datePredicate,
+                            ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
 
-                dueNowOrWarningPredicate = CompoundPredicate.combine(
-                        PredicateParser.OR_OPERATOR,
-                        datePredicate,
-                        ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
+                    // Search for all content where the override is not missing and the date for this duration is due
+                    overridesList.addAll(Query.from(Content.class)
+                            .where(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
+                            .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = ?", duration)
+                            .and(dueNowOrWarningPredicate)
+                            .and(getSitePredicate())
+                            .selectAll());
+                }
 
-                // Search for all content where the override is not missing and the date for this duration is due
-                overridesList.addAll(Query.from(Content.class)
-                        .where(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
-                        .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = ?", duration)
-                        .and(dueNowOrWarningPredicate)
-                        .and(getSitePredicate())
-                        .selectAll());
+            } else {
+                /* If there are no notification durations configured in sites & settings, conditional will arrive here
+                 * to catch anything that is past due
+                 */
+                for (ReviewCycleContentTypeMap contentMap : contentMaps) {
+                    Predicate datePredicate = PredicateParser.Static.parse(
+                            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + " != missing and "
+                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + " < ?", now.getTime());
+
+                    overridesList.addAll(Query.from(Content.class)
+                            .where(contentMap.getTypePredicate())
+                            .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
+                            .and(datePredicate)
+                            .and(getSitePredicate())
+                            .selectAll());
+                }
             }
 
             LOGGER.info("Content overrides size: " + overridesList.size());
@@ -158,11 +178,15 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
         Long d1 = c.getTime().toInstant().toEpochMilli();
 
         c.set(Calendar.HOUR_OF_DAY, 23);
         c.set(Calendar.MINUTE, 59);
         c.set(Calendar.SECOND, 59);
+        c.set(Calendar.MILLISECOND, 999);
+
         Long d2 = c.getTime().toInstant().toEpochMilli();
 
         // Get all notifications from the content ids
