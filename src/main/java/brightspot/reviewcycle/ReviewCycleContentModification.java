@@ -122,7 +122,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             nextReviewDate = FORMAT.format(utcDue);
         }
 
-        return "This will set the cycle duration for this specific content, which is " + nextReviewDate + ".  The cycle begins on the date the change was made.";
+        return "This will set the cycle for this specific content. The cycle begins on the last cycle due date. The next cycle due date is " + nextReviewDate + ".";
     }
 
     private Date calculateNextReviewDate() {
