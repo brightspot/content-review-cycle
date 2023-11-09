@@ -3,7 +3,7 @@
 > [!WARNING]
 > This is a high-level summary of the functionality this extension provides.
 
-This extension provides the ability for Brightspot to print the words "Hello World" to the log when certain records are saved.
+This extension provides the ability for users the ability to set up review cycles for different content types. Users can configure cycle durations in Admin > Sites & Settings for each content type along with a timeframe of when a banner warning would appear at the top of the content edit page which will allow you to review or dismiss it. Additionally, users can also override the cycle duration of specific content types. Notifications can also be set up in Admin > Users & Roles > Notifications. Content that is past due or due in a specific amount of days will be shown as a notification in the CMS header.
 
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
