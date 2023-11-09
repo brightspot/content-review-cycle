@@ -32,9 +32,7 @@ Maven:
     <version>1.0.0</version>
 </dependency>
 ```
-​
-<!-- Does the following link to "releases" work -->
-Substitute `1.0.0` for the desired version found on the [releases](/releases) list.
+​Substitute `1.0.0` for the desired version found on the [releases](/releases) list.
 ​
 ## Usage
 ​
@@ -49,9 +47,7 @@ public class MyContentType extends Content implements HasReviewCycle {
 When you implement this interface on a content type, that content type is now included in the review cycle behavior configured at the site level at **Sites & Settings > [Site] > CMS > Review Cycle Settings**. In addition, administrators can override the default review cycle configuration for this content type in **Sites & Settings > [Site] > CMS > Review Cycle Settings > Content Types > Content Type Map > Content Type**. 
 ​
 ## Documentation
-​
-<!-- The following link gives error 404. -->
-​
+​​
 The latest Javadocs can be found [here](https://artifactory.psdops.com/public/com/brightspot/platform-extension-example/%5BRELEASE%5D/platform-extension-example-%5BRELEASE%5D-javadoc.jar!/index.html).
 ​
 ## Versioning
@@ -89,7 +85,5 @@ dependencies {
 Finally, compile your project and run your local Brightspot instance.
 ​
 ## License
-​
-<!-- Does this link actually work? -->
-​
+​​
 See: [LICENSE](LICENSE).
