@@ -90,7 +90,7 @@ Then, add the following to your project's `build.gradle` file:
 
 ```groovy
 dependencies {
-    api 'com.brightspot:platform-extension-example:1.0.0-SNAPSHOT'
+    api 'com.brightspot:content-freshness:1.0.0-SNAPSHOT'
 }
 ```
 
