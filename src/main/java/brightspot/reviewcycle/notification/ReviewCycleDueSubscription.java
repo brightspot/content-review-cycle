@@ -22,7 +22,7 @@ import com.psddev.dari.notification.Subscriber;
 public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNotificationBundle>
     implements ToolUserOnlySubscription {
 
-    private static final DateFormat FORMAT = new SimpleDateFormat("MM/dd/yyyy");
+    private static final DateFormat FORMAT = new SimpleDateFormat("EEE, MMM dd, yyyy");
 
     // Example:
     // REVIEW DUE: The following content in [Site name param] is due for content review on [Review date param] (MM/DD/YYYY): [link to asset]
