@@ -2,6 +2,7 @@ package brightspot.reviewcycle.notification;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import brightspot.reviewcycle.ReviewCycleUtils;
 import com.google.common.collect.ImmutableMap;
@@ -28,7 +29,10 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
 
         if (payload != null && payload.getOwnerName() != null && payload.getContentId() != null
             && payload.getContentLabel() != null && payload.getDueDate() != null) {
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String formattedDueDateUTC = dateFormat.format(payload.getDueDate());
 
             String prefix = "REVIEW DUE: The following content in ";
             String siteName = payload.getOwnerName();
@@ -41,7 +45,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
                 body = " is due for content review on ";
             }
 
-            String dateString = "(" + dateFormat.format(payload.getDueDate()) + ")";
+            String dateString = "(" + dateFormat.format(formattedDueDateUTC) + ")";
             String formatting = ": ";
             String contentName = payload.getContentLabel();
 
@@ -52,7 +56,7 @@ public class ReviewCycleDueSubscription extends ToolSubscription<ReviewCycleNoti
                             ReviewCycleDueSubscription.class,
                             ImmutableMap.of(
                                     "siteName", payload.getOwnerName(),
-                                    "dateString", dateFormat.format(payload.getDueDate()),
+                                    "dateString", dateFormat.format(formattedDueDateUTC),
                                     "contentLabel", payload.getContentLabel()
                             )
                     ),
