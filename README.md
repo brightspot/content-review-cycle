@@ -1,4 +1,4 @@
-# Review Cycle
+# Content Freshness Review Cycle
 
 > [!WARNING]
 > This is a high-level summary of the functionality this extension provides.
