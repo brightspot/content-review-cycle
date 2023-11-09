@@ -1,6 +1,5 @@
 # Content Freshness Review Cycle
 
-> [!WARNING]
 > This is a high-level summary of the functionality this extension provides.
 
 This extension provides the ability for users the ability to set up review cycles for different content types. Users can configure cycle durations in Admin > Sites & Settings for each content type along with a timeframe of when a banner warning would appear at the top of the content edit page which will allow you to review or dismiss it. Additionally, users can also override the cycle duration of specific content types. Notifications can also be set up in Admin > Users & Roles > Notifications. Content that is past due or due in a specific amount of days will be shown as a notification in the CMS header.
@@ -16,7 +15,6 @@ This extension provides the ability for users the ability to set up review cycle
 
 ## Prerequisites
 
-> [!WARNING]
 > This section should list any prerequisites that must be met before the extension can be installed or used. 
 > If a specific version of Brightspot is needed, it should be listed here.
 > If any external APIs are used (AWS, GCP, or any other third party service), they should be listed here.
@@ -43,7 +41,6 @@ Substitute `1.0.0` for the desired version found on the [releases](/releases) li
 
 ## Usage
 
-> [!WARNING]
 > This section describes how a developer would use this extension in their project.
 > It should include code samples, if applicable, as well as a link to the end user documentation. 
 
