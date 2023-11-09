@@ -54,7 +54,7 @@ public class MyContentType extends Content implements HasReviewCycle {
     // ...
 }
 ```
-Now, in Sites and Settings > CMS > Review Cycle Settings you will be able to select that content type. Additionally, you will be able to override specific content on the content edit page by going to the overrides cluster.
+Now, in Sites & Settings > CMS > Review Cycle Settings you will be able to select that content type. Additionally, you will be able to override specific content on the content edit page by going to the overrides cluster.
 
 ## Documentation
 
