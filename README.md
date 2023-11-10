@@ -1,9 +1,9 @@
 # Content Freshness Review Cycle
-
-> This is a high-level summary of the functionality this extension provides.
-
-This extension provides the ability for users the ability to set up review cycles for different content types. Users can configure cycle durations in Admin > Sites & Settings for each content type along with a timeframe of when a banner warning would appear at the top of the content edit page which will allow you to review or dismiss it. Additionally, users can also override the cycle duration of specific content types. Notifications can also be set up in Admin > Users & Roles > Notifications. Content that is past due or due in a specific amount of days will be shown as a notification in the CMS header.
-
+​
+This extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals. 
+​
+The review cycle contains at least three durations: the overall duration of the review cycle, the time when a banner appears in an asset's content edit form, and the times when editors receive notifications. Administrators can configure different review cycles for different site-content type combinations. Additionally, editors can override review cycles at the asset level.
+​
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
 * [Usage](#usage)
@@ -12,22 +12,18 @@ This extension provides the ability for users the ability to set up review cycle
 * [Contributing](#contributing)
 * [Local Development](#local-development)
 * [License](#license)
-
+​
 ## Prerequisites
-
-> This section should list any prerequisites that must be met before the extension can be installed or used. 
-> If a specific version of Brightspot is needed, it should be listed here.
-> If any external APIs are used (AWS, GCP, or any other third party service), they should be listed here.
-
-This extension requires an instance of [Brightspot](https://www.brightspot.com/) and access to the project source code.
-
+​
+Adding this extension requires a working development environment. The base development environment is available on github at https://github.com/perfectsense/brightspot-go.
+​
 ## Installation
-
+​
 Gradle:
 ```groovy
 api 'com.brightspot:content-freshness:1.0.0'
 ```
-
+​
 Maven:
 ```xml
 <dependency>
@@ -36,63 +32,58 @@ Maven:
     <version>1.0.0</version>
 </dependency>
 ```
-
-Substitute `1.0.0` for the desired version found on the [releases](/releases) list.
-
+​Substitute `1.0.0` for the desired version found on the [releases](/releases) list.
+​
 ## Usage
-
-> This section describes how a developer would use this extension in their project.
-> It should include code samples, if applicable, as well as a link to the end user documentation. 
-
-To opt in to this behavior, implement the `HasReviewCycle` interface on your content type:
-
+​
+You explicitly activate this extension for individual content types by implementing the `HasReviewCycle` interface:
+​
 ```java
 public class MyContentType extends Content implements HasReviewCycle {
     // ...
 }
 ```
-Now, in Sites & Settings > CMS > Review Cycle Settings you will be able to select that content type. Additionally, you will be able to override specific content on the content edit page by going to the overrides cluster.
-
+​
+When you implement this interface on a content type, that content type is now included in the review cycle behavior configured at the site level at **Sites & Settings > [Site] > CMS > Review Cycle Settings**. In addition, administrators can override the default review cycle configuration for this content type in **Sites & Settings > [Site] > CMS > Review Cycle Settings > Content Types > Content Type Map > Content Type**. 
+​
 ## Documentation
-
+​​
 The latest Javadocs can be found [here](https://artifactory.psdops.com/public/com/brightspot/platform-extension-example/%5BRELEASE%5D/platform-extension-example-%5BRELEASE%5D-javadoc.jar!/index.html).
-
+​
 ## Versioning
-
+​
 The version numbers for this extension will strictly follow [Semantic Versioning](https://semver.org/).
-
+​
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to
 discuss what you would like to change.
-
+​
 ## Local Development
-
-Assuming you already have a local Brightspot instance up and running, you can 
-test this extension by running the following command from this project's root 
-directory to install a `SNAPSHOT` to your local Maven repository:
-
+​
+Assuming you already have a local Brightspot instance up and running, you can test this extension by running the following command from this project's root directory to install a `SNAPSHOT` to your local Maven repository:
+​
 ```shell
 ./gradlew publishToMavenLocal
 ```
-
-Next, ensure your project's `build.gradle` file contains 
-
+​
+Next, ensure your project's `build.gradle` file contains the following:
+​
 ```groovy
 repositories {
     mavenLocal()
 }
 ```
-
+​
 Then, add the following to your project's `build.gradle` file:
-
+​
 ```groovy
 dependencies {
     api 'com.brightspot:content-freshness:1.0.0-SNAPSHOT'
 }
 ```
-
+​
 Finally, compile your project and run your local Brightspot instance.
-
+​
 ## License
-
+​​
 See: [LICENSE](LICENSE).
