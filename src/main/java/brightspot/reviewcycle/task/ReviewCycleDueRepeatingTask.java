@@ -89,12 +89,13 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                         ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
 
                 // Check for content (that is due or has a warning today) that does not have overrides
-                List<Content> contents = Query.from(Content.class)
+                List<Content> contents = new ArrayList<>();
+                Query.from(Content.class)
                         .where(map.getTypePredicate())
                         .and(dueNowOrWarningPredicate)
                         .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = missing")
                         .and(getSitePredicate())
-                        .selectAll();
+                        .iterable(10).forEach(contents::add);
 
                 LOGGER.info("Contents size: " + contents.size());
 
@@ -125,12 +126,13 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                             ReviewCycleDueWarningDuration.getDueWarningPredicate(now, notificationWarningTimes));
 
                     // Search for all content where the override is not missing and the date for this duration is due
-                    overridesList.addAll(Query.from(Content.class)
+                    Query.from(Content.class)
                             .where(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
                             .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " = ?", duration)
                             .and(dueNowOrWarningPredicate)
                             .and(getSitePredicate())
-                            .selectAll());
+                            .iterable(10)
+                            .forEach(overridesList::add);
                 }
 
             } else {
@@ -144,12 +146,13 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                                     + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
                                     + " < ?", now.getTime());
 
-                    overridesList.addAll(Query.from(Content.class)
+                    Query.from(Content.class)
                             .where(contentMap.getTypePredicate())
                             .and(ReviewCycleContentModification.REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME + " != missing")
                             .and(datePredicate)
                             .and(getSitePredicate())
-                            .selectAll());
+                            .iterable(10)
+                            .forEach(overridesList::add);
                 }
             }
 
@@ -296,7 +299,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     protected DateTime calculateRunTime(DateTime currentTime) {
 
         if (!DefaultTaskHost.isRunningOnTaskHost()) {
-            //will never run since this is in the future
+            // This will never run since this is in the future
             return currentTime.plusMinutes(2);
         }
 
