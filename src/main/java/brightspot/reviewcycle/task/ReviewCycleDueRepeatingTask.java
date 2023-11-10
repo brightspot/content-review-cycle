@@ -295,6 +295,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
 
+        if (!DefaultTaskHost.isRunningOnTaskHost()) {
+            //will never run since this is in the future
+            return currentTime.plusMinutes(2);
+        }
+
         return everyMinute(currentTime);
     }
 
