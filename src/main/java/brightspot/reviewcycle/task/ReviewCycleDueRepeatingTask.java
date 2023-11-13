@@ -291,7 +291,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             return currentTime.plusMinutes(2);
         }
 
-        return everyHour(currentTime);
+        return everyMinute(currentTime);
     }
 
 }
