@@ -66,8 +66,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     value,
                     siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationWarningTimes());
 
-            LOGGER.info("ContentMaps size: " + contentMaps.size());
-
             String group = "";
             ReviewCycleDurationForContent cycleDuration;
 
@@ -80,8 +78,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             for (ReviewCycleContentTypeMap map : contentMaps) {
                 group = map.getContentType().getInternalName();
                 cycleDuration = map.getCycleDuration();
-
-                LOGGER.info(group + " " + cycleDuration.toString());
 
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
                         PredicateParser.OR_OPERATOR,
@@ -97,15 +93,11 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                         .and(getSitePredicate())
                         .iterable(10).forEach(contents::add);
 
-                LOGGER.info("Contents size: " + contents.size());
-
                 // Prevents duplication of notification records
                 dedupeNotificationRecords(contents);
             }
 
             List<Content> overridesList = new ArrayList<>();
-
-            LOGGER.info("Searching cycle overrides configured content...");
 
             // Handle cycle overrides
 
@@ -155,8 +147,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                             .forEach(overridesList::add);
                 }
             }
-
-            LOGGER.info("Content overrides size: " + overridesList.size());
 
             // Prevents duplication of notification records
             dedupeNotificationRecords(overridesList);
@@ -234,7 +224,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             Date nextDue;
             ReviewCycleNotificationBundle reviewCycleNotificationBundle = notification.getBundle();
             if (reviewCycleNotificationBundle != null) {
-                LOGGER.info("Updating Notification for " + reviewCycleNotificationBundle.getContentLabel());
                 // Calculate date
                 if (reviewCycleNotificationBundle.getContent() != null) {
                     nextDue = reviewCycleNotificationBundle.getContent()
@@ -258,7 +247,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     private void publishNotifications(List<Content> contentList) {
         Date nextDue;
         for (Content content : contentList) {
-            LOGGER.info("Sending Notification for " + content.getLabel());
             // Calculate date
             nextDue = content
                     .as(ReviewCycleContentModification.class)
@@ -303,7 +291,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             return currentTime.plusMinutes(2);
         }
 
-        return everyMinute(currentTime);
+        return everyHour(currentTime);
     }
 
 }
