@@ -365,18 +365,18 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
             // Due soon
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
-                ImmutableMap.of("days", days)), "label.dueSoon", "Due soon");
+                ImmutableMap.of("days", days)), "label.dueSoon", "Due Soon");
         } else {
             // Past due
             return ToolLocalization.text(new LocalizationContext(
                 ReviewActivityWidget.class,
-                ImmutableMap.of("days", Math.abs(days))), "label.pastDue", "Past due");
+                ImmutableMap.of("days", Math.abs(days))), "label.pastDue", "Past Due");
         }
     }
 
     private enum DueTarget {
 
-        DUE_SOON("duesoon", "Due Soon (15 Days)", 15L),
+        DUE_SOON("duesoon", "Due Within 15 Days", 15L),
         PAST_DUE("pastdue", "Past Due", 0L);
 
         private final String targetKey;
