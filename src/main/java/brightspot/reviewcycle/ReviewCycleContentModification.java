@@ -103,7 +103,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @Indexed
     @ToolUi.Filterable
     @ToolUi.Sortable
-    @ToolUi.Hidden
     public Date getNextReviewDateIndex() {
         // Or else should do the look-up for the date. Truncate whatever is returned
         Date nextReview = Optional.ofNullable(getNextReviewDate()).orElseGet(this::calculateNextReviewDate);
