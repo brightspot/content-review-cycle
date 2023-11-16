@@ -76,9 +76,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
             // Handle each Type mapped in Sites & Settings
             for (ReviewCycleContentTypeMap map : contentMaps) {
-                group = map.getContentType().getInternalName();
-                cycleDuration = map.getCycleDuration();
-
                 dueNowOrWarningPredicate = CompoundPredicate.combine(
                         PredicateParser.OR_OPERATOR,
                         map.getExpiredPredicate(now),
