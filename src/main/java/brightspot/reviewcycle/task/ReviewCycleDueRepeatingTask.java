@@ -66,9 +66,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     value,
                     siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationWarningTimes());
 
-            String group = "";
-            ReviewCycleDurationForContent cycleDuration;
-
             Predicate dueNowOrWarningPredicate;
 
             // Time of now, truncated to days
