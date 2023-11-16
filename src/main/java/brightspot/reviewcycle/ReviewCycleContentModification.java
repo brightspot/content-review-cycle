@@ -187,7 +187,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
                 .setReviewDate(now));
 
         // If next review is manually set, calculate last review and clear setting
-        // TODO may not be needed anymore
         if (getNextReviewDate() != null) {
             if (this.getReviewCycleMap() != null && this.getReviewCycleMap().getCycleDuration() != null) {
                 this.setReviewDate(this.getReviewCycleMap()
