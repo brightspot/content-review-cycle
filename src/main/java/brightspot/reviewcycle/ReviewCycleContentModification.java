@@ -201,6 +201,8 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             this.setReviewCycleDuration(null);
         }
 
+        setNextReviewDateIndex(getNextReviewDateIndex());
+
         super.beforeSave();
     }
 
