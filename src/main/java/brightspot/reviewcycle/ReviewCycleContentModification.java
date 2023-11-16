@@ -43,7 +43,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     public static final String REVIEW_DATE_FIELD_INTERNAL_NAME = FIELD_PREFIX + REVIEW_DATE_FIELD;
 
     public static final String NEXT_REVIEW_DATE_FIELD = "nextReviewDate";
-    public static final String NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME = FIELD_PREFIX + NEXT_REVIEW_DATE_FIELD;
+    public static final String NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME = FIELD_PATH + FIELD_PREFIX + NEXT_REVIEW_DATE_FIELD;
 
     public static final String REVIEW_CYCLE_DURATION_FIELD = "reviewCycleDuration";
     public static final String REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME =

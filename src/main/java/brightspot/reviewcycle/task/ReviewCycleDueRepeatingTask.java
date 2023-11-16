@@ -80,6 +80,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 // Check for content (that is due or has a warning today) that does not have overrides
                 List<Content> contents = new ArrayList<>();
+
                 Query.from(Content.class)
                         .where(map.getTypePredicate())
                         .and(dueNowOrWarningPredicate)
