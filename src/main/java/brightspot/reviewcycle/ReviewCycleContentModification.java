@@ -68,6 +68,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @ToolUi.Hidden
     private Date nextReviewDate;
 
+    @Indexed
+    @ToolUi.Filterable
+    @ToolUi.Sortable
+    @InternalName(NEXT_REVIEW_DATE_INDEX_FIELD)
+    private Date nextReviewDateIndex;
+
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
@@ -100,10 +106,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         this.nextReviewDate = nextReviewDate;
     }
 
-    @Indexed
-    @ToolUi.Filterable
-    @ToolUi.Sortable
-    @InternalName(NEXT_REVIEW_DATE_INDEX_FIELD)
     public Date getNextReviewDateIndex() {
         // Or else should do the look-up for the date. Truncate whatever is returned
         Date nextReview = Optional.ofNullable(getNextReviewDate()).orElseGet(this::calculateNextReviewDate);
@@ -112,6 +114,10 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
             .map(Date::from)
             .orElse(null);
+    }
+
+    public void setNextReviewDateIndex(Date nextReviewDateIndex) {
+        this.nextReviewDateIndex = nextReviewDateIndex;
     }
 
     public String getNextReviewDateNote() {
@@ -181,6 +187,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
                 .setReviewDate(now));
 
         // If next review is manually set, calculate last review and clear setting
+        // TODO may not be needed anymore
         if (getNextReviewDate() != null) {
             if (this.getReviewCycleMap() != null && this.getReviewCycleMap().getCycleDuration() != null) {
                 this.setReviewDate(this.getReviewCycleMap()
