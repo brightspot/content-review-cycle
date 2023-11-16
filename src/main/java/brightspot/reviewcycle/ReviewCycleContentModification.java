@@ -72,6 +72,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @ToolUi.Filterable
     @ToolUi.Sortable
     @InternalName(NEXT_REVIEW_DATE_INDEX_FIELD)
+    @ToolUi.Hidden
     private Date nextReviewDateIndex;
 
     @Tab(REVIEW_CYCLE_TAB)
