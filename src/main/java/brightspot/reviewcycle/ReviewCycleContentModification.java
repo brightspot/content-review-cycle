@@ -68,6 +68,13 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @ToolUi.Hidden
     private Date nextReviewDate;
 
+    @Indexed
+    @ToolUi.Filterable
+    @ToolUi.Sortable
+    @InternalName(NEXT_REVIEW_DATE_INDEX_FIELD)
+    @ToolUi.Hidden
+    private Date nextReviewDateIndex;
+
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
     @DisplayName("Review Cycle Duration for This Content Only")
@@ -100,10 +107,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         this.nextReviewDate = nextReviewDate;
     }
 
-    @Indexed
-    @ToolUi.Filterable
-    @ToolUi.Sortable
-    @ToolUi.Hidden
     public Date getNextReviewDateIndex() {
         // Or else should do the look-up for the date. Truncate whatever is returned
         Date nextReview = Optional.ofNullable(getNextReviewDate()).orElseGet(this::calculateNextReviewDate);
@@ -112,6 +115,10 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
             .map(Date::from)
             .orElse(null);
+    }
+
+    public void setNextReviewDateIndex(Date nextReviewDateIndex) {
+        this.nextReviewDateIndex = nextReviewDateIndex;
     }
 
     public String getNextReviewDateNote() {
@@ -193,6 +200,8 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         if (originalObject.as(Site.ObjectModification.class).getOwner() == null) {
             this.setReviewCycleDuration(null);
         }
+
+        setNextReviewDateIndex(getNextReviewDateIndex());
 
         super.beforeSave();
     }
