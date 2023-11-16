@@ -39,7 +39,7 @@ public class NextDueDateSearchResultField implements SearchResultField {
             .filter(HasReviewCycle.class::isInstance)
             .map(record -> record.as(HasReviewCycle.class))
             .map(hasReviewCycle -> hasReviewCycle.as(ReviewCycleContentModification.class))
-            .map(ReviewCycleContentModification::getNextReviewDateIndex)
+            .map(ReviewCycleContentModification::getNextReviewDate)
             .map(date -> ToolLocalization.dateTime(date.getTime()))
             .orElse("");
     }

@@ -82,9 +82,9 @@ public class ReviewCycleContentTypeMap extends Record {
     // Using "next date"
     public Predicate getExpiredPredicate(Date now) {
         return PredicateParser.Static.parse(
-            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+            ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                 + " != missing and "
-                + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                 + " < ?", now.getTime());
     }
 

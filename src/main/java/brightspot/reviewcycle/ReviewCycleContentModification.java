@@ -49,10 +49,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     public static final String REVIEW_CYCLE_DURATION_FIELD_INTERNAL_NAME =
         FIELD_PATH + FIELD_PREFIX + REVIEW_CYCLE_DURATION_FIELD;
 
-    public static final String NEXT_REVIEW_DATE_INDEX_FIELD = "getNextReviewDateIndex";
-    public static final String NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME =
-        FIELD_PATH + FIELD_PREFIX + NEXT_REVIEW_DATE_INDEX_FIELD;
-
     private static final DateFormat FORMAT = new SimpleDateFormat("EEE, MMM dd, yyyy");
 
     @Tab(REVIEW_CYCLE_TAB)
@@ -62,18 +58,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     @ToolUi.ReadOnly
     private Date reviewDate;
 
-    @Tab(REVIEW_CYCLE_TAB)
-    @Cluster(REVIEW_CYCLE_CLUSTER)
-    @InternalName(NEXT_REVIEW_DATE_FIELD)
-    @ToolUi.Hidden
-    private Date nextReviewDate;
-
     @Indexed
     @ToolUi.Filterable
     @ToolUi.Sortable
-    @InternalName(NEXT_REVIEW_DATE_INDEX_FIELD)
+    @InternalName(NEXT_REVIEW_DATE_FIELD)
     @ToolUi.Hidden
-    private Date nextReviewDateIndex;
+    private Date nextReviewDate;
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
@@ -100,16 +90,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
     }
 
     public Date getNextReviewDate() {
-        return nextReviewDate;
-    }
-
-    public void setNextReviewDate(Date nextReviewDate) {
-        this.nextReviewDate = nextReviewDate;
-    }
-
-    public Date getNextReviewDateIndex() {
-        // Or else should do the look-up for the date. Truncate whatever is returned
-        Date nextReview = Optional.ofNullable(getNextReviewDate()).orElseGet(this::calculateNextReviewDate);
+        Date nextReview = this.calculateNextReviewDate();
         return Optional.ofNullable(nextReview)
             .map(Date::toInstant)
             .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
@@ -117,12 +98,12 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .orElse(null);
     }
 
-    public void setNextReviewDateIndex(Date nextReviewDateIndex) {
-        this.nextReviewDateIndex = nextReviewDateIndex;
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
     }
 
     public String getNextReviewDateNote() {
-        Date utcDue = getNextReviewDateIndex();
+        Date utcDue = getNextReviewDate();
         String nextReviewDate = "N/A";
         if (utcDue != null) {
             FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -187,21 +168,11 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .ifPresent(revision -> originalObject.as(ReviewCycleContentModification.class)
                 .setReviewDate(now));
 
-        // If next review is manually set, calculate last review and clear setting
-        if (getNextReviewDate() != null) {
-            if (this.getReviewCycleMap() != null && this.getReviewCycleMap().getCycleDuration() != null) {
-                this.setReviewDate(this.getReviewCycleMap()
-                    .getCycleDuration()
-                    .subtractCycleDuration(getNextReviewDate()));
-            }
-            this.setNextReviewDate(null);
-        }
-
         if (originalObject.as(Site.ObjectModification.class).getOwner() == null) {
             this.setReviewCycleDuration(null);
         }
 
-        setNextReviewDateIndex(getNextReviewDateIndex());
+        setNextReviewDate(getNextReviewDate());
 
         super.beforeSave();
     }

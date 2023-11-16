@@ -107,9 +107,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 for (ReviewCycleDurationForContent duration : durations) {
                     // Generate predicate
                     Predicate datePredicate = PredicateParser.Static.parse(
-                            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                            ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                                     + " != missing and "
-                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                                     + " < ?", now.getTime());
 
                     dueNowOrWarningPredicate = CompoundPredicate.combine(
@@ -133,9 +133,9 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                  */
                 for (ReviewCycleContentTypeMap contentMap : contentMaps) {
                     Predicate datePredicate = PredicateParser.Static.parse(
-                            ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                            ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                                     + " != missing and "
-                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                                    + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                                     + " < ?", now.getTime());
 
                     Query.from(Content.class)
@@ -228,7 +228,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                 if (reviewCycleNotificationBundle.getContent() != null) {
                     nextDue = reviewCycleNotificationBundle.getContent()
                             .as(ReviewCycleContentModification.class)
-                            .getNextReviewDateIndex();
+                            .getNextReviewDate();
                     notification.getBundle().setDueDate(nextDue);
 
                 }
@@ -250,7 +250,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             // Calculate date
             nextDue = content
                     .as(ReviewCycleContentModification.class)
-                    .getNextReviewDateIndex();
+                    .getNextReviewDate();
 
             new ReviewCycleDueNotification(
                     content,

@@ -72,7 +72,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         if (site == null) {
             configuredObjectTypes = Query.from(HasReviewCycle.class)
                     .where("* matches *")
-                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
+                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
                     .groupBy("_type")
                     .stream()
                     .map(Grouping::getKeys)
@@ -95,7 +95,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
 
             configuredObjectTypes = Query.from(HasReviewCycle.class)
                     .where("* matches *")
-                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing")
+                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
                     .and(site.itemsPredicate())
                     .groupBy("_type")
                     .stream()
@@ -350,7 +350,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
     }
 
     private String getDueOffsetLabel(HasReviewCycle hasReviewCycle) {
-        Date nextReviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getNextReviewDateIndex();
+        Date nextReviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getNextReviewDate();
         if (nextReviewDate == null) {
             return ToolLocalization.text(
                 ReviewActivityWidget.class,
@@ -414,19 +414,19 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
             if (this.getDaysOffset() == 0) {
                 // Check if it was due before right now
                 return PredicateParser.Static.parse(
-                    ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                    ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                         + " != missing and "
-                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                         + " < ?", now.toInstant().toEpochMilli());
             } else {
                 ZonedDateTime dueSoon = now.plusDays(this.getDaysOffset());
                 // Check if it is due soon but after now
                 return PredicateParser.Static.parse(
-                    ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                    ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                         + " != missing and "
-                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                         + " >= ? and "
-                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                         + " < ?", now.toInstant().toEpochMilli(), dueSoon.toInstant().toEpochMilli());
             }
 

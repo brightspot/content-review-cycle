@@ -96,9 +96,9 @@ public class ReviewCycleDueWarningDuration extends Record {
         for (ReviewCycleDueWarningDuration dueWarningDuration : dueWarningDurations) {
             currentInstant = addCycleDuration(now, dueWarningDuration).toInstant();
             currentPredicate = PredicateParser.Static.parse(
-                    ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                    ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                             + " != missing && "
-                            + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME
+                            + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME
                             + " = ?",
                     Date.from(currentInstant));
 
@@ -118,8 +118,8 @@ public class ReviewCycleDueWarningDuration extends Record {
     public static Predicate getBannerDueWarningPredicate(Date now, ReviewCycleDueWarningDuration dueWarningDuration) {
         Date dueSoon = ReviewCycleDueWarningDuration.addCycleDuration(now, dueWarningDuration);
         return PredicateParser.Static.parse(
-                ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " != missing && "
-                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_INDEX_FIELD_INTERNAL_NAME + " <= ? ",
+                ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing && "
+                        + ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " <= ? ",
                 dueSoon.getTime());
     }
 
