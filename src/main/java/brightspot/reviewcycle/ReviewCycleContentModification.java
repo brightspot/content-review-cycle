@@ -198,12 +198,22 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
             Site site = getOriginalObject().as(Site.ObjectModification.class).getOwner();
             if (site != null) {
-                List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
-                        site,
-                        s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
-                return mapsList.stream()
-                        .filter(map -> map.getContentType().equals(originalObjectType))
-                        .findFirst().orElse(null);
+
+                ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
+
+                if (settings != null) {
+
+                    List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
+                            site,
+                            s -> settings.getContentTypeMaps());
+
+                    return mapsList.stream()
+                            .filter(map -> map.getContentType().equals(originalObjectType))
+                            .findFirst().orElse(null);
+                } else {
+
+                    return null;
+                }
             }
         }
 
