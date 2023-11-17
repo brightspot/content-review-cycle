@@ -190,7 +190,14 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         page.writeEnd();
         page.writeEnd();
 
-        if (result == null) {
+        if (configuredObjectTypes == null) {
+            page.writeStart("div", "class", "message message-info");
+            page.writeStart("p");
+            page.writeHtml(ToolLocalization.text(ReviewActivityWidget.class, "message.noActivity", "Review cycle not configured!"));
+            page.writeEnd();
+            page.writeEnd();
+
+        } else if (result == null) {
             page.writeStart("div", "class", "message message-warning");
             page.writeStart("p");
             page.writeEnd();
