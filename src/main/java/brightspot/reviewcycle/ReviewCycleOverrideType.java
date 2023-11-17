@@ -29,27 +29,34 @@ public class ReviewCycleOverrideType implements DynamicType {
         // Get content type maps lists from sites & settings
         ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
 
+        // If settings is disabled, we hide review cycle overrides fields from ALL content types
         if (settings == null) {
-            return;
-        }
-
-        List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
-                site,
-                s -> settings.getContentTypeMaps());
-
-        // Get the content type maps into a list of object types
-        List<ObjectType> reviewCycleContentTypeMapObjectList
-                = mapsList
-                .stream()
-                .map(ReviewCycleContentTypeMap::getContentType)
-                .collect(Collectors.toList());
-
-        // If true, then we know that sites & settings content type map list does not have the object configured
-        if (!reviewCycleContentTypeMapObjectList.contains(type)) {
             type.getFields().stream()
                     .filter(objectField -> objectField.getInternalName()
                             .startsWith(ReviewCycleContentModification.FIELD_PREFIX))
                     .forEach(field -> field.as(ToolUi.class).setHidden(true));
+
+        // Else, we hide SPECIFIC overrides fields
+        } else {
+
+            List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
+                    site,
+                    s -> settings.getContentTypeMaps());
+
+            // Get the content type maps into a list of object types
+            List<ObjectType> reviewCycleContentTypeMapObjectList
+                    = mapsList
+                    .stream()
+                    .map(ReviewCycleContentTypeMap::getContentType)
+                    .collect(Collectors.toList());
+
+            // If true, then we know that sites & settings content type map list does not have the object configured
+            if (!reviewCycleContentTypeMapObjectList.contains(type)) {
+                type.getFields().stream()
+                        .filter(objectField -> objectField.getInternalName()
+                                .startsWith(ReviewCycleContentModification.FIELD_PREFIX))
+                        .forEach(field -> field.as(ToolUi.class).setHidden(true));
+            }
         }
     }
 }
