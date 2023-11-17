@@ -99,24 +99,26 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                         .stream()
                         .map(ReviewCycleContentTypeMap::getContentType)
                         .collect(Collectors.toList());
-            }
 
-            configuredObjectTypes = Query.from(HasReviewCycle.class)
-                    .where("* matches *")
-                    .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
-                    .and(site.itemsPredicate())
-                    .groupBy("_type")
-                    .stream()
-                    .map(Grouping::getKeys)
-                    .filter(keys -> !keys.isEmpty())
-                    .map(key -> key.get(0))
-                    .filter(String.class::isInstance)
-                    .map(String.class::cast)
-                    .map(UuidUtils::fromString)
-                    .map(ObjectType::getInstance)
-                    .filter(mapsList::contains)
-                    .sorted()
-                    .collect(Collectors.toList());
+                configuredObjectTypes = Query.from(HasReviewCycle.class)
+                        .where("* matches *")
+                        .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
+                        .and(site.itemsPredicate())
+                        .groupBy("_type")
+                        .stream()
+                        .map(Grouping::getKeys)
+                        .filter(keys -> !keys.isEmpty())
+                        .map(key -> key.get(0))
+                        .filter(String.class::isInstance)
+                        .map(String.class::cast)
+                        .map(UuidUtils::fromString)
+                        .map(ObjectType::getInstance)
+                        .filter(mapsList::contains)
+                        .sorted()
+                        .collect(Collectors.toList());
+            } else {
+                configuredObjectTypes = null;
+            }
         }
 
         // Original type param selector
