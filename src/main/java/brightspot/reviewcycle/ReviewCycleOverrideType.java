@@ -27,9 +27,15 @@ public class ReviewCycleOverrideType implements DynamicType {
         Site site = WebRequest.getCurrent().as(ToolRequest.class).getCurrentSite();
 
         // Get content type maps lists from sites & settings
+        ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
+
+        if (settings == null) {
+            return;
+        }
+
         List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
                 site,
-                s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
+                s -> settings.getContentTypeMaps());
 
         // Get the content type maps into a list of object types
         List<ObjectType> reviewCycleContentTypeMapObjectList
