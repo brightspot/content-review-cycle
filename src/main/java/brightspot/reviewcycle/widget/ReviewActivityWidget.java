@@ -90,7 +90,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
 
             ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
 
-            List<ObjectType> mapsList = new ArrayList<>();
+            List<ObjectType> mapsList;
 
             if (settings != null) {
                 mapsList = SiteSettings.get(

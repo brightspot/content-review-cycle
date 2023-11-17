@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import brightspot.reviewcycle.ReviewCycleContentTypeMap;
 import brightspot.reviewcycle.ReviewCycleDurationForContent;
+import brightspot.reviewcycle.ReviewCycleSettings;
 import brightspot.reviewcycle.ReviewCycleSiteSettings;
 import brightspot.reviewcycle.notification.ReviewCycleDueNotification;
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
@@ -58,13 +59,22 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         for (Site value : sites) {
 
+            ReviewCycleSettings settings = SiteSettings.get(
+                    value,
+                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings());
+
+            // If settings is disabled here, check the next site
+            if (settings == null) {
+                continue;
+            }
+
             List<ReviewCycleContentTypeMap> contentMaps = SiteSettings.get(
                     value,
-                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
+                    siteSettings -> settings.getContentTypeMaps());
 
             List<ReviewCycleDueWarningDuration> notificationWarningTimes = SiteSettings.get(
                     value,
-                    siteSettings -> siteSettings.as(ReviewCycleSiteSettings.class).getSettings().getNotificationWarningTimes());
+                    siteSettings -> settings.getNotificationWarningTimes());
 
             Predicate dueNowOrWarningPredicate;
 
