@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 import brightspot.reviewcycle.HasReviewCycle;
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import brightspot.reviewcycle.ReviewCycleContentTypeMap;
+import brightspot.reviewcycle.ReviewCycleSettings;
 import brightspot.reviewcycle.ReviewCycleSiteSettings;
 import com.google.common.collect.ImmutableMap;
 import com.psddev.cms.db.Content;
@@ -86,12 +88,18 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .collect(Collectors.toList());
         } else {
 
-            List<ObjectType> mapsList = SiteSettings.get(
-                            site,
-                            s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps())
-                    .stream()
-                    .map(ReviewCycleContentTypeMap::getContentType)
-                    .collect(Collectors.toList());
+            ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
+
+            List<ObjectType> mapsList = new ArrayList<>();
+
+            if (settings != null) {
+                mapsList = SiteSettings.get(
+                                site,
+                                s -> settings.getContentTypeMaps())
+                        .stream()
+                        .map(ReviewCycleContentTypeMap::getContentType)
+                        .collect(Collectors.toList());
+            }
 
             configuredObjectTypes = Query.from(HasReviewCycle.class)
                     .where("* matches *")
