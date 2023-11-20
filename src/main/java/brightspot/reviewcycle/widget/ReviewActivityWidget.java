@@ -283,6 +283,16 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                 ToolUser updateUser = contentData.getUpdateUser();
                 HasReviewCycle hasReviewCycle = contentState.as(HasReviewCycle.class);
 
+                /*
+                   Check if missing next review date. If so, don't render the row since content will never
+                   have a missing next review date as long as the content type is configured in sites & settings.
+                 */
+                Date nextReviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getNextReviewDate();
+
+                if (nextReviewDate == null) {
+                    continue;
+                }
+
                 if (!contentState.isVisible()) {
                     permalink = JspUtils.getAbsolutePath(
                         page.getRequest(),
@@ -367,12 +377,7 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
 
     private String getDueOffsetLabel(HasReviewCycle hasReviewCycle) {
         Date nextReviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getNextReviewDate();
-        if (nextReviewDate == null) {
-            return ToolLocalization.text(
-                ReviewActivityWidget.class,
-                "label.missingNextReview",
-                "Missing Next Review Date");
-        }
+
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.DAYS);
 
         long days = ChronoUnit.DAYS.between(now.toInstant(), nextReviewDate.toInstant());
