@@ -45,7 +45,9 @@ When you implement this interface on a content type, that content type is now av
 
 ## Documentation
 
-The latest Javadocs can be found [here](https://artifactory.psdops.com/public/com/brightspot/content-review-cycle/%5BRELEASE%5D/content-review-cycle-%5BRELEASE%5D-javadoc.jar!/index.html).
+- [Video Demo](https://www.brightspot.com/documentation/review-cycles-video-demo)
+- [User Guide](https://www.brightspot.com/documentation/review-cycles)
+- [Javadocs](https://artifactory.psdops.com/public/com/brightspot/content-review-cycle/%5BRELEASE%5D/content-review-cycle-%5BRELEASE%5D-javadoc.jar!/index.html)
 
 ## Versioning
 
