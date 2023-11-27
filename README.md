@@ -9,7 +9,6 @@ This extension provides a review-cycle feature that reminds editors to review sp
 * [Versioning](#versioning)
 * [Contributing](#contributing)
 * [Local Development](#local-development)
-* [License](#license)
 
 ## Prerequisites
 
@@ -83,7 +82,3 @@ dependencies {
 ```
 
 Finally, compile your project and run your local Brightspot instance.
-
-## License
-
-See: [LICENSE](LICENSE).
