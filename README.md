@@ -30,7 +30,7 @@ Maven:
     <version>1.0.0</version>
 </dependency>
 ```
-Substitute `1.0.0` for the desired version found on the [releases](/releases) list.
+Substitute `1.0.0` for the desired version found on the [releases](https://github.com/brightspot/content-review-cycle/tags) page.
 
 ## Usage
 
@@ -50,11 +50,13 @@ The latest Javadocs can be found [here](https://artifactory.psdops.com/public/co
 
 ## Versioning
 
-The version numbers for this extension will strictly follow [Semantic Versioning](https://semver.org/).
+The version numbers for this extension will strictly follow [Semantic Versioning](https://semver.org/). The latest release can be found [here](https://github.com/brightspot/content-review-cycle/tags).
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to
-discuss what you would like to change.
+
+If you have feedback, suggestions or comments on this open-source platform extension, please feel free to make them publicly on the issues tab [here](https://github.com/brightspot/content-review-cycle/issues).
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## Local Development
 
