@@ -48,9 +48,9 @@ public class MyContentType extends Content implements HasReviewCycle {
 When you implement this interface on a content type, that content type is now included in the review cycle behavior configured at the site level at **Sites & Settings > [Site] > CMS > Review Cycle Settings**. In addition, administrators can override the default review cycle configuration for this content type in **Sites & Settings > [Site] > CMS > Review Cycle Settings > Content Types > Content Type Map > Content Type**. 
 ​
 ## Documentation
-​​
-The latest Javadocs can be found [here](https://artifactory.psdops.com/public/com/brightspot/platform-extension-example/%5BRELEASE%5D/platform-extension-example-%5BRELEASE%5D-javadoc.jar!/index.html).
-​
+
+The latest Javadocs can be found [here](https://artifactory.psdops.com/public/com/brightspot/content-review-cycle/%5BRELEASE%5D/content-review-cycle-%5BRELEASE%5D-javadoc.jar!/index.html).
+
 ## Versioning
 ​
 The version numbers for this extension will strictly follow [Semantic Versioning](https://semver.org/).
