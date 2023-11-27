@@ -15,8 +15,9 @@ The review cycle contains at least three durations: the overall duration of the 
 ​
 ## Prerequisites
 ​
-Adding this extension requires a working development environment. The base development environment is available on github at https://github.com/perfectsense/brightspot-go.
-​
+
+This extension requires an instance of [Brightspot](https://www.brightspot.com/) and access to the project source code.
+
 ## Installation
 ​
 Gradle:
