@@ -41,7 +41,7 @@ public class MyContentType extends Content implements HasReviewCycle {
 }
 ```
 
-When you implement this interface on a content type, that content type is now available to be configured for the Review Cycle feature by an administrator. Please see the user guide for instructions on configuring this feature.
+When you implement this interface on a content type, that content type is now available to be configured for the Review Cycle feature by an administrator. Please see the [user guide](https://www.brightspot.com/documentation/review-cycles) for instructions on configuring this feature.
 
 ## Documentation
 
