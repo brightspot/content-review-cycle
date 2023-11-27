@@ -16,7 +16,7 @@ plugins {
     id 'com.brightspot.gradle' version '1.0.0-rc28'
 }
 
-rootProject.name = 'content-freshness'
+rootProject.name = 'content-review-cycle'
 
 brightspot {
     projectGroup = 'com.brightspot'

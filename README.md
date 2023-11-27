@@ -1,4 +1,4 @@
-# Content Freshness Review Cycle
+# Content Review Cycle
 ​
 This extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals. 
 ​
@@ -21,14 +21,14 @@ Adding this extension requires a working development environment. The base devel
 ​
 Gradle:
 ```groovy
-api 'com.brightspot:content-freshness:1.0.0'
+api 'com.brightspot:content-review-cycle:1.0.0'
 ```
 ​
 Maven:
 ```xml
 <dependency>
     <groupId>com.brightspot</groupId>
-    <artifactId>content-freshness</artifactId>
+    <artifactId>content-review-cycle</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -78,7 +78,7 @@ Then, add the following to your project's `build.gradle` file:
 ​
 ```groovy
 dependencies {
-    api 'com.brightspot:content-freshness:1.0.0-SNAPSHOT'
+    api 'com.brightspot:content-review-cycle:1.0.0-SNAPSHOT'
 }
 ```
 ​

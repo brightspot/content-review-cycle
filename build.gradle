@@ -8,7 +8,7 @@ java {
     withSourcesJar()
 }
 
-description = 'Content Freshness'
+description = 'Content Review Cycles'
 
 dependencies {
     api 'com.psddev:cms-db'
