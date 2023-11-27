@@ -1,6 +1,8 @@
 # Content Review Cycle
 
-This extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals.
+This Brightspot Platform Extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals.
+
+[Review Cycles Keep Your Living Documents Fresh](https://www.brightspot.com/review-cycles-keep-your-living-documents-fresh)
 
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
