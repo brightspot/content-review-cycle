@@ -1,8 +1,6 @@
 # Content Review Cycle
 
-This extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals. 
-
-The review cycle contains at least three durations: the overall duration of the review cycle, the time when a banner appears in an asset's content edit form, and the times when editors receive notifications. Administrators can configure different review cycles for different site-content type combinations. Additionally, editors can override review cycles at the asset level.
+This extension provides a review-cycle feature that reminds editors to review specific assets at fixed intervals.
 
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
@@ -15,7 +13,7 @@ The review cycle contains at least three durations: the overall duration of the 
 
 ## Prerequisites
 
-This extension requires an instance of [Brightspot](https://www.brightspot.com/) and access to the project source code.
+This extension requires an instance of [Brightspot](https://www.brightspot.com/) (version 4.5.15 or later) and access to the project source code.
 
 ## Installation
 
@@ -44,7 +42,7 @@ public class MyContentType extends Content implements HasReviewCycle {
 }
 ```
 
-When you implement this interface on a content type, that content type is now included in the review cycle behavior configured at the site level at **Sites & Settings > [Site] > CMS > Review Cycle Settings**. In addition, administrators can override the default review cycle configuration for this content type in **Sites & Settings > [Site] > CMS > Review Cycle Settings > Content Types > Content Type Map > Content Type**. 
+When you implement this interface on a content type, that content type is now available to be configured for the Review Cycle feature by an administrator. Please see the user guide for instructions on configuring this feature.
 
 ## Documentation
 
