@@ -181,8 +181,8 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
             not creating new ones (until the next day), because that means publishedNotifications has been called.
          */
         boolean notificationsSentOutToday = Query.from(ReviewCycleDueNotification.class)
-                .where("publishedAt > ?", d1)
-                .and("publishedAt < ?", d2)
+                .where("publishedAt >= ?", d1)
+                .and("publishedAt <= ?", d2)
                 .hasMoreThan(0);
 
         if (notificationsSentOutToday) {
@@ -213,7 +213,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
                 }
                 notification.getBundle().setLastNotified(new Date());
-                notification.publish();
+                notification.saveImmediately();
             }
         }
     }
