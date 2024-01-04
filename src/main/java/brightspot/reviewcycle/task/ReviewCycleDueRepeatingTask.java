@@ -153,19 +153,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
 
         List<ReviewCycleDueNotification> reviewCycleDueNotifications = new ArrayList<>();
 
-        // Get all notifications from the content ids
-        for (UUID overridesListId : overridesListIds) {
-            ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
-                    .where("getContentId = ?", overridesListId)
-                    .first();
-
-            if (notification != null) {
-                reviewCycleDueNotifications.add(notification);
-            }
-        }
-
-        // We want to send out notifications ONCE daily
-
+        // We want to send out notifications ONCE daily AND to the latest notifications
         Calendar c = new GregorianCalendar();
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
@@ -176,6 +164,18 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         c.set(Calendar.MINUTE, 59);
         c.set(Calendar.SECOND, 59);
         Long d2 = c.getTime().toInstant().toEpochMilli();
+
+        // Get all notifications from the content ids
+        for (UUID overridesListId : overridesListIds) {
+            ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
+                    .where("getContentId = ?", overridesListId)
+                    .and("publishedAt >= ?", d1)
+                    .first();
+
+            if (notification != null) {
+                reviewCycleDueNotifications.add(notification);
+            }
+        }
 
         /* If there are more than 0 notifications that have been sent out today, we only update notification records
             not creating new ones (until the next day), because that means publishedNotifications has been called.
