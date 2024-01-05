@@ -176,7 +176,7 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             this.setNextReviewDate(null);
         }
 
-        this.setNextReviewDate(calculateNextReviewDateOverride());
+        this.setNextReviewDate(calculateNextReviewDate());
 
         if (originalObject.as(Site.ObjectModification.class).getOwner() == null) {
             this.setReviewCycleDuration(null);
@@ -196,8 +196,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         if (originalObjectType == null) {
             return null;
         }
-
-        setNextReviewDate(calculateNextReviewDateOverride());
 
         // Check for override
         if (this.getReviewCycleDurationForContentOverride() != null) {
@@ -220,59 +218,4 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
         return null;
     }
 
-    private Date calculateNextReviewDateOverride() {
-
-        HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
-        ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
-                .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
-                .map(ReviewCycleContentModification::getReviewCycleMapOverride)
-                .map(ReviewCycleContentTypeMap::getCycleDuration)
-                .orElse(null);
-
-        if (duration == null) {
-            return null;
-        }
-
-        // Calculate the next review date based off of the last review date
-        Date reviewDate = hasReviewCycle.as(ReviewCycleContentModification.class).getReviewDate();
-
-        if (reviewDate == null) {
-            reviewDate = hasReviewCycle.as(Content.ObjectModification.class).getUpdateDate();
-        }
-
-        return duration.addCycleDuration(reviewDate);
-    }
-
-    public ReviewCycleContentTypeMap getReviewCycleMapOverride() {
-
-        if (!(getOriginalObject() instanceof Record)) {
-            return null;
-        }
-
-        ObjectType originalObjectType = ObjectType.getInstance(getOriginalObject().getClass());
-
-        if (originalObjectType == null) {
-            return null;
-        }
-
-        // Check for override
-        if (this.getReviewCycleDurationForContentOverride() != null) {
-            return new ReviewCycleContentTypeMap(
-                    originalObjectType,
-                    this.getReviewCycleDurationForContentOverride());
-        } else {
-
-            Site site = getOriginalObject().as(Site.ObjectModification.class).getOwner();
-            if (site != null) {
-                List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
-                        site,
-                        s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
-                return mapsList.stream()
-                        .filter(map -> map.getContentType().equals(originalObjectType))
-                        .findFirst().orElse(null);
-            }
-        }
-
-        return null;
-    }
 }
