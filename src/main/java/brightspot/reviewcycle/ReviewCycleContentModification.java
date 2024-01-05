@@ -121,6 +121,11 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(ReviewCycleContentTypeMap::getCycleDuration)
             .orElse(null);
 
+        return calculateParent(duration, hasReviewCycle);
+    }
+
+    private Date calculateParent(ReviewCycleDurationForContent duration, HasReviewCycle hasReviewCycle) {
+
         if (duration == null) {
             return null;
         }
@@ -176,8 +181,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             this.setNextReviewDate(null);
         }
 
-        this.setNextReviewDate(calculateNextReviewDate());
-
         if (originalObject.as(Site.ObjectModification.class).getOwner() == null) {
             this.setReviewCycleDuration(null);
         }
@@ -197,25 +200,60 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             return null;
         }
 
-        // Check for override
-        if (this.getReviewCycleDurationForContentOverride() != null) {
-            return new ReviewCycleContentTypeMap(
-                originalObjectType,
-                this.getReviewCycleDurationForContentOverride());
-        } else {
+        setNextReviewDate(calculateNextReviewDateOverride());
 
+        return checkForOverrides(originalObjectType);
+
+    }
+
+    private ReviewCycleContentTypeMap checkForOverrides(ObjectType originalObjectType) {
+
+        ReviewCycleContentTypeMap result = null;
+
+        if (this.getReviewCycleDurationForContentOverride() != null) {
+            result = new ReviewCycleContentTypeMap(
+                    originalObjectType,
+                    this.getReviewCycleDurationForContentOverride());
+        } else {
             Site site = getOriginalObject().as(Site.ObjectModification.class).getOwner();
             if (site != null) {
                 List<ReviewCycleContentTypeMap> mapsList = SiteSettings.get(
-                    site,
-                    s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
-                return mapsList.stream()
-                    .filter(map -> map.getContentType().equals(originalObjectType))
-                    .findFirst().orElse(null);
+                        site,
+                        s -> s.as(ReviewCycleSiteSettings.class).getSettings().getContentTypeMaps());
+                result = mapsList.stream()
+                        .filter(map -> map.getContentType().equals(originalObjectType))
+                        .findFirst().orElse(null);
             }
         }
 
-        return null;
+        return result;
     }
 
+    private Date calculateNextReviewDateOverride() {
+
+        HasReviewCycle hasReviewCycle = ReviewCycleUtils.resolve(getOriginalObject());
+        ReviewCycleDurationForContent duration = Optional.ofNullable(hasReviewCycle)
+                .map(reviewCycle -> reviewCycle.as(ReviewCycleContentModification.class))
+                .map(ReviewCycleContentModification::getReviewCycleMapOverride)
+                .map(ReviewCycleContentTypeMap::getCycleDuration)
+                .orElse(null);
+
+        return calculateParent(duration, hasReviewCycle);
+    }
+
+    public ReviewCycleContentTypeMap getReviewCycleMapOverride() {
+
+        if (!(getOriginalObject() instanceof Record)) {
+            return null;
+        }
+
+        ObjectType originalObjectType = ObjectType.getInstance(getOriginalObject().getClass());
+
+        if (originalObjectType == null) {
+            return null;
+        }
+
+        // Check for overrides
+        return checkForOverrides(originalObjectType);
+    }
 }
