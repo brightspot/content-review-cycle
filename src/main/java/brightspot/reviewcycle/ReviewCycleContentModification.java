@@ -64,7 +64,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
 
     @Tab(REVIEW_CYCLE_TAB)
     @Cluster(REVIEW_CYCLE_CLUSTER)
-    @DynamicNoteMethod("getNextReviewDateNote")
     @InternalName(NEXT_REVIEW_DATE_FIELD)
     @ToolUi.ReadOnly
     private Date nextReviewDate;
@@ -113,17 +112,6 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             .map(instant -> instant.truncatedTo(ChronoUnit.DAYS))
             .map(Date::from)
             .orElse(null);
-    }
-
-    public String getNextReviewDateNote() {
-        Date utcDue = getNextReviewDateIndex();
-
-        if (utcDue != null) {
-            FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-            return FORMAT.format(utcDue);
-        } else {
-            return null;
-        }
     }
 
     private Date calculateNextReviewDate() {
@@ -189,6 +177,8 @@ public class ReviewCycleContentModification extends Modification<HasReviewCycle>
             }
             this.setNextReviewDate(null);
         }
+
+        this.setNextReviewDate(calculateNextReviewDateOverride());
 
         if (originalObject.as(Site.ObjectModification.class).getOwner() == null) {
             this.setReviewCycleDuration(null);
