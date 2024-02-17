@@ -267,7 +267,7 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
     @Override
     protected DateTime calculateRunTime(DateTime currentTime) {
 
-        return everyHour(currentTime);
+        return everyMinute(currentTime);
     }
 
 }
