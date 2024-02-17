@@ -172,12 +172,6 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
                     .and("publishedAt >= ?", d1)
                     .first();
 
-            if (notification == null) {
-                notification = Query.from(ReviewCycleDueNotification.class)
-                        .where("getContentId = ?", overridesListId)
-                        .first();
-            }
-
             if (notification != null) {
                 reviewCycleDueNotifications.add(notification);
             }
