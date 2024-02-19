@@ -3,6 +3,7 @@ package brightspot.reviewcycle.task;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -165,15 +166,17 @@ public class ReviewCycleDueRepeatingTask extends RepeatingTask {
         Long d2 = c.getTime().toInstant().toEpochMilli();
 
         // Get all notifications from the content ids
-        for (UUID overridesListId : overridesListIds) {
+        for (int i = 0; i < overridesListIds.size(); i++) {
 
             ReviewCycleDueNotification notification = Query.from(ReviewCycleDueNotification.class)
-                    .where("getContentId = ?", overridesListId)
+                    .where("getContentId = ?", overridesListIds.get(i))
                     .and("publishedAt >= ?", d1)
                     .first();
 
             if (notification != null) {
                 reviewCycleDueNotifications.add(notification);
+            } else {
+                publishNotifications(Collections.singletonList(contentList.get(i)));
             }
         }
 
