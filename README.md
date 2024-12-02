@@ -20,7 +20,7 @@ This extension requires an instance of [Brightspot](https://www.brightspot.com/)
 
 Gradle:
 ```groovy
-api 'com.brightspot:content-review-cycle:1.0.0'
+api 'com.brightspot:content-review-cycle:1.0.1'
 ```
 
 Maven:
@@ -28,10 +28,10 @@ Maven:
 <dependency>
     <groupId>com.brightspot</groupId>
     <artifactId>content-review-cycle</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
-Substitute `1.0.0` for the desired version found on the [releases](https://github.com/brightspot/content-review-cycle/tags) page.
+Substitute `1.0.1` for the desired version found on the [releases](https://github.com/brightspot/content-review-cycle/tags) page.
 
 ## Usage
 

@@ -22,8 +22,8 @@ brightspot {
     projectGroup = 'com.brightspot'
 
     versions {
-        brightspot = '4.5.15.8'
-        brightspotGo = '1.4.3'
+        brightspot = '4.7.22'
+        brightspotGo = '1.6.6'
         java = 8
         enforcePlatform = false
     }

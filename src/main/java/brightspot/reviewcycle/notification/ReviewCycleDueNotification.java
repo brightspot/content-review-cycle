@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 import com.psddev.cms.db.Content;
+import com.psddev.cms.watch.WatcherObjectModification;
 import com.psddev.dari.db.Query;
 import com.psddev.dari.notification.Notification;
 import com.psddev.dari.notification.Subscriber;
-import com.psddev.watch.WatcherObjectModification;
 
 /**
  * Used in {@link brightspot.reviewcycle.task.ReviewCycleDueRepeatingTask} for publishing notifications
