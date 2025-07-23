@@ -23,7 +23,6 @@ brightspot {
 
     versions {
         brightspot = '4.7.22'
-        brightspotGo = '1.6.6'
         java = 8
         enforcePlatform = false
     }

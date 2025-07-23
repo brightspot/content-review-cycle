@@ -6,11 +6,12 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
-import brightspot.core.tool.EditTopHtml;
 import brightspot.reviewcycle.notification.ReviewCycleDueWarningDuration;
 import brightspot.reviewcycle.servlet.DismissReviewCycleServlet;
 import brightspot.reviewcycle.servlet.StartReviewServlet;
 import com.psddev.cms.db.Content;
+import com.psddev.cms.tool.ContentEditWidget;
+import com.psddev.cms.tool.ContentEditWidgetPlacement;
 import com.psddev.cms.tool.ToolPageContext;
 import com.psddev.cms.ui.ToolLocalization;
 import com.psddev.cms.ui.ToolRequest;
@@ -27,23 +28,31 @@ import org.slf4j.LoggerFactory;
 /**
  * ReviewCycleDueBanner is associated with the banner shown at the top of the content type edit page ready for review.
  */
-public class ReviewCycleDueBanner implements EditTopHtml {
+public class ReviewCycleDueBanner extends ContentEditWidget {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReviewCycleDueBanner.class);
 
     @Override
-    public int getPriority() {
-        return 1;
+    public ContentEditWidgetPlacement getPlacement(ToolPageContext page, Object content) {
+        return ContentEditWidgetPlacement.TOP;
     }
 
     @Override
-    public boolean isSupported(Object object) {
-        return object instanceof Content && !WebRequest.getCurrent().getParameterNames().contains("draftId");
+    public String getHeading(ToolPageContext page, Object content) {
+        // Return null to suppress the default heading
+        return null;
     }
 
     @Override
-    public void writeHtml(Object item, ToolPageContext page) {
-        UUID itemId = State.getInstance(item).getId();
+    public boolean shouldDisplay(ToolPageContext page, Object content) {
+        return content instanceof Content && !WebRequest.getCurrent().getParameterNames().contains("draftId");
+    }
+
+    @Override
+    public void display(ToolPageContext page, Object content, ContentEditWidgetPlacement placement) throws IOException {
+
+        UUID itemId = State.getInstance(content).getId();
+
         HasReviewCycle reviewCycleContent = Query.fromAll()
             .where("_id = ?", itemId)
             .findFirst()
@@ -57,7 +66,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
         }
 
         ReviewCycleContentTypeMap map = Optional.of(reviewCycleContent)
-            .map(content -> content.as(ReviewCycleContentModification.class))
+            .map(c -> c.as(ReviewCycleContentModification.class))
             .map(ReviewCycleContentModification::getReviewCycleMap)
             .orElse(null);
 
@@ -73,7 +82,7 @@ public class ReviewCycleDueBanner implements EditTopHtml {
             if (PredicateParser.Static.evaluate(reviewCycleContent, map.getExpiredPredicate(now))) {
                 this.writeBanner(reviewCycleContent, page, true);
             } else if (PredicateParser.Static.evaluate(
-                item,
+                content,
                 ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, dueWarningDuration))) {
                 this.writeBanner(reviewCycleContent, page, false);
             }
@@ -106,10 +115,6 @@ public class ReviewCycleDueBanner implements EditTopHtml {
 
         try {
             page.write(bannerMessage);
-
-            // Add this temporarily
-            page.writeStart("br");
-            page.writeStart("br");
         } catch (IOException e) {
             LOGGER.warn("Error while writing review cycle banner!", e);
         }
