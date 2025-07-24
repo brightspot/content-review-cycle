@@ -19,11 +19,11 @@ plugins {
 dependencyResolutionManagement {
     versionCatalogs {
         brightspotLibs {
-            library('brightspot', 'com.psddev:brightspot-bom:4.5.15.8')
-            library('brightspotDependencies', 'com.psddev:brightspot-dependencies:4.5.15.8')
+            library('brightspot', 'com.psddev:brightspot-bom:4.7.22')
+            library('brightspotDependencies', 'com.psddev:brightspot-dependencies:4.7.22')
 
-            library('brightspotGo', 'com.brightspot.go:bom:1.4.3')
-            library('brightspotGoDependencies', 'com.brightspot.go:go-dependencies:1.4.3')
+            library('brightspotGo', 'com.brightspot.go:bom:1.6.6')
+            library('brightspotGoDependencies', 'com.brightspot.go:go-dependencies:1.6.6')
         }
     }
 }
