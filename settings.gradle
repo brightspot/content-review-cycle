@@ -13,7 +13,19 @@ pluginManagement {
 }
 
 plugins {
-    id 'com.brightspot.gradle' version '1.1.1'
+    id 'com.brightspot.gradle' version '3.6.0'
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        brightspotLibs {
+            library('brightspot', 'com.psddev:brightspot-bom:4.5.15.8')
+            library('brightspotDependencies', 'com.psddev:brightspot-dependencies:4.5.15.8')
+
+            library('brightspotGo', 'com.brightspot.go:bom:1.4.3')
+            library('brightspotGoDependencies', 'com.brightspot.go:go-dependencies:1.4.3')
+        }
+    }
 }
 
 rootProject.name = 'content-review-cycle'
@@ -22,8 +34,6 @@ brightspot {
     projectGroup = 'com.brightspot'
 
     versions {
-        brightspot = '4.5.15.8'
-        brightspotGo = '1.4.3'
         java = 8
         enforcePlatform = false
     }
