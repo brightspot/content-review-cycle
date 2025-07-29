@@ -3,7 +3,6 @@ package brightspot.reviewcycle.servlet;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
-import javax.servlet.http.HttpServletResponse;
 
 import brightspot.reviewcycle.ReviewCycleContentModification;
 import com.psddev.cms.db.Content;
@@ -16,7 +15,6 @@ import com.psddev.dari.web.AbstractWebPage;
 import com.psddev.dari.web.WebRequest;
 import com.psddev.dari.web.annotation.WebPath;
 import com.psddev.dari.web.annotation.WebPathGroup;
-import org.apache.http.HttpHeaders;
 
 import static com.psddev.dari.html.Nodes.*;
 
