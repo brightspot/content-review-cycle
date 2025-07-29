@@ -18,6 +18,8 @@ import com.psddev.dari.web.annotation.WebPath;
 import com.psddev.dari.web.annotation.WebPathGroup;
 import org.apache.http.HttpHeaders;
 
+import static com.psddev.dari.html.Nodes.*;
+
 /**
  * This class handles when a user chooses the option to dismiss a review of a content type.
  */
@@ -64,8 +66,8 @@ public class DismissReviewCycleServlet extends AbstractWebPage {
                 .build();
 
             // Redirect to edit page
-            response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-            response.setHeader(HttpHeaders.LOCATION, redirectUrl);
+            response.toBody().write(SCRIPT.with(
+                "window.location.href = '" + redirectUrl + "';"));
         }
     }
 }
