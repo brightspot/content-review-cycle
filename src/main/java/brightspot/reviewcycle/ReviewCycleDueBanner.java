@@ -70,21 +70,26 @@ public class ReviewCycleDueBanner extends ContentEditWidget {
             .map(ReviewCycleContentModification::getReviewCycleMap)
             .orElse(null);
 
-        // Get due warning duration
-        ReviewCycleDueWarningDuration dueWarningDuration = WebRequest.getCurrent()
-                .as(ToolRequest.class)
-                .getCurrentSite().as(ReviewCycleSiteSettings.class)
-                .getSettings().getReviewCycleDueWarningDuration();
-
         if (map != null) {
-            Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
+            // Get due warning duration
+            final Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
 
             if (PredicateParser.Static.evaluate(reviewCycleContent, map.getExpiredPredicate(now))) {
                 this.writeBanner(reviewCycleContent, page, true);
-            } else if (PredicateParser.Static.evaluate(
-                content,
-                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, dueWarningDuration))) {
-                this.writeBanner(reviewCycleContent, page, false);
+            } else {
+                boolean showReviewDueWarning = Optional.ofNullable(WebRequest.getCurrent()
+                        .as(ToolRequest.class)
+                        .getCurrentSite())
+                    .map(site -> site.as(ReviewCycleSiteSettings.class))
+                    .map(ReviewCycleSiteSettings::getSettings)
+                    .map(ReviewCycleSettings::getReviewCycleDueWarningDuration)
+                    .map(dueWarningDuration -> PredicateParser.Static.evaluate(
+                        content,
+                        ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, dueWarningDuration)))
+                    .orElse(false);
+                if (showReviewDueWarning) {
+                    this.writeBanner(reviewCycleContent, page, false);
+                }
             }
         }
     }
@@ -105,7 +110,10 @@ public class ReviewCycleDueBanner extends ContentEditWidget {
             .with(Nodes.P
                 .with(Nodes.SPAN.with(message))
                 .with(Nodes.A.href(createDismissReviewServletUrl(item))
-                .with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.cancelReview", "Cancel this review")))
+                    .with(ToolLocalization.text(
+                        ReviewCycleDueBanner.class,
+                        "label.cancelReview",
+                        "Cancel this review")))
                 .with(Nodes.SPAN.with(ToolLocalization.text(ReviewCycleDueBanner.class, "label.OR", " OR ")))
                 .with(Nodes.A
                     .href(createStartReviewServletUrl(item))
