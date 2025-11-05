@@ -39,13 +39,56 @@ public class ReviewCycleDueBanner extends ContentEditWidget {
 
     @Override
     public String getHeading(ToolPageContext page, Object content) {
-        // Return null to suppress the default heading
         return null;
     }
 
     @Override
     public boolean shouldDisplay(ToolPageContext page, Object content) {
-        return content instanceof Content && !WebRequest.getCurrent().getParameterNames().contains("draftId");
+
+        if (!(content instanceof Content)
+            || WebRequest.getCurrent().getParameterNames().contains("draftId")) {
+            return false;
+        }
+
+        UUID itemId = State.getInstance(content).getId();
+
+        HasReviewCycle reviewCycleContent = Query.fromAll()
+            .where("_id = ?", itemId)
+            .findFirst()
+            .map(Recordable.class::cast)
+            .filter(recordable -> recordable.isInstantiableTo(HasReviewCycle.class))
+            .map(recordable -> recordable.as(HasReviewCycle.class))
+            .orElse(null);
+
+        if (reviewCycleContent == null) {
+            return false;
+        }
+
+        ReviewCycleContentTypeMap map = Optional.of(reviewCycleContent)
+            .map(c -> c.as(ReviewCycleContentModification.class))
+            .map(ReviewCycleContentModification::getReviewCycleMap)
+            .orElse(null);
+
+        if (map == null) {
+            return false;
+        }
+
+        final Date now = Date.from(new Date().toInstant().truncatedTo(ChronoUnit.DAYS));
+
+        if (PredicateParser.Static.evaluate(reviewCycleContent, map.getExpiredPredicate(now))) {
+            return true;
+        }
+
+        return Optional.ofNullable(WebRequest.getCurrent()
+                .as(ToolRequest.class)
+                .getCurrentSite())
+            .map(site -> site.as(ReviewCycleSiteSettings.class))
+            .map(ReviewCycleSiteSettings::getSettings)
+            .map(ReviewCycleSettings::getReviewCycleDueWarningDuration)
+            .map(dueWarningDuration -> PredicateParser.Static.evaluate(
+                content,
+                ReviewCycleDueWarningDuration.getBannerDueWarningPredicate(now, dueWarningDuration)))
+            .orElse(false);
     }
 
     @Override
