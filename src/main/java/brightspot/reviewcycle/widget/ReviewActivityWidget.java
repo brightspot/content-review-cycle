@@ -157,6 +157,16 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
         page.writeStart("h2", "class", "icon icon-list DashboardWidget-title");
         page.writeHtml(ToolLocalization.text(ReviewActivityWidget.class, "title", "Review Cycle Activity"));
         page.writeEnd();
+        page.writeStart(
+            "button",
+            "type",
+            "button",
+            "aria-label",
+            ToolLocalization.text(ReviewActivityWidget.class, "aria.expandWidget"),
+            "title",
+            ToolLocalization.text(ReviewActivityWidget.class, "aria.expandWidget"),
+            "class",
+            "v5-only DashboardWidget-maximize").writeEnd();
 
         page.writeStart("div", "class", "widget-filters");
 
