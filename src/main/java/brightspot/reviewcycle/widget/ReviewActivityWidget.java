@@ -42,6 +42,7 @@ import com.psddev.dari.db.Recordable;
 import com.psddev.dari.db.State;
 import com.psddev.dari.util.JspUtils;
 import com.psddev.dari.util.PaginatedResult;
+import com.psddev.dari.util.TypeDefinition;
 import com.psddev.dari.util.UuidUtils;
 import com.psddev.dari.web.UrlBuilder;
 import com.psddev.dari.web.WebRequest;
@@ -72,8 +73,37 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
 
         if (site == null) {
             configuredObjectTypes = Query.from(HasReviewCycle.class)
+                .where("* matches *")
+                .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
+                .groupBy("_type")
+                .stream()
+                .map(Grouping::getKeys)
+                .filter(keys -> !keys.isEmpty())
+                .map(key -> key.get(0))
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(UuidUtils::fromString)
+                .map(ObjectType::getInstance)
+                .sorted()
+                .collect(Collectors.toList());
+        } else {
+
+            ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
+
+            List<ObjectType> mapsList;
+
+            if (settings != null) {
+                mapsList = SiteSettings.get(
+                        site,
+                        s -> settings.getContentTypeMaps())
+                    .stream()
+                    .map(ReviewCycleContentTypeMap::getContentType)
+                    .collect(Collectors.toList());
+
+                configuredObjectTypes = Query.from(HasReviewCycle.class)
                     .where("* matches *")
                     .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
+                    .and(site.itemsPredicate())
                     .groupBy("_type")
                     .stream()
                     .map(Grouping::getKeys)
@@ -83,38 +113,9 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
                     .map(String.class::cast)
                     .map(UuidUtils::fromString)
                     .map(ObjectType::getInstance)
+                    .filter(mapsList::contains)
                     .sorted()
                     .collect(Collectors.toList());
-        } else {
-
-            ReviewCycleSettings settings = SiteSettings.get(site, s -> s.as(ReviewCycleSiteSettings.class).getSettings());
-
-            List<ObjectType> mapsList;
-
-            if (settings != null) {
-                mapsList = SiteSettings.get(
-                                site,
-                                s -> settings.getContentTypeMaps())
-                        .stream()
-                        .map(ReviewCycleContentTypeMap::getContentType)
-                        .collect(Collectors.toList());
-
-                configuredObjectTypes = Query.from(HasReviewCycle.class)
-                        .where("* matches *")
-                        .and(ReviewCycleContentModification.NEXT_REVIEW_DATE_FIELD_INTERNAL_NAME + " != missing")
-                        .and(site.itemsPredicate())
-                        .groupBy("_type")
-                        .stream()
-                        .map(Grouping::getKeys)
-                        .filter(keys -> !keys.isEmpty())
-                        .map(key -> key.get(0))
-                        .filter(String.class::isInstance)
-                        .map(String.class::cast)
-                        .map(UuidUtils::fromString)
-                        .map(ObjectType::getInstance)
-                        .filter(mapsList::contains)
-                        .sorted()
-                        .collect(Collectors.toList());
             } else {
                 configuredObjectTypes = null;
             }
@@ -152,20 +153,34 @@ public class ReviewActivityWidget extends DefaultDashboardWidget {
 
         // --- Draw widget ---
 
-        page.writeStart("div", "class", "widget");
-        page.writeStart("h1", "class", "icon icon-list");
+        page.writeStart("div", "class", "DashboardWidget");
+        page.writeStart("h2", "class", "icon icon-list DashboardWidget-title");
         page.writeHtml(ToolLocalization.text(ReviewActivityWidget.class, "title", "Review Cycle Activity"));
         page.writeEnd();
+        page.writeStart(
+            "button",
+            "type",
+            "button",
+            "aria-label",
+            ToolLocalization.text(ReviewActivityWidget.class, "aria.expandWidget"),
+            "title",
+            ToolLocalization.text(ReviewActivityWidget.class, "aria.expandWidget"),
+            "class",
+            "v5-only DashboardWidget-maximize").writeEnd();
 
         page.writeStart("div", "class", "widget-filters");
-        for (Class<? extends QueryRestriction> c : QueryRestriction.classIterable()) {
-            page.writeQueryRestrictionForm(c);
-        }
 
         // Type select
         page.writeStart("form",
             "method", "get",
-            "action", page.url(null));
+            "action", page.url(null),
+            "data-bsp-autosubmit", "");
+
+        page.writeStart("div", "class", "queryRestrictions");
+        for (Class<? extends QueryRestriction> c : QueryRestriction.classIterable()) {
+            TypeDefinition.getInstance(c).newInstance().writeHtml(page);
+        }
+        page.writeEnd();
 
         page.writeTypeSelect(
             configuredObjectTypes,
